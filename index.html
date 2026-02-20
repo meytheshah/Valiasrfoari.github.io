@@ -40,12 +40,33 @@ body {
   gap: 20px;
 }
 
-.header h1 {
-  margin: 0;
-  color: #22c55e;
+/* Title with Iranian Flag Colors */
+.title-wrapper {
+  flex: 1;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.title-word-1 {
+  color: #239f40; /* Iranian Flag Green */
   font-size: 3rem;
   font-weight: 900;
-  flex: 1;
+  margin: 0;
+}
+
+.title-word-2 {
+  color: #ffffff; /* Iranian Flag White */
+  font-size: 3rem;
+  font-weight: 900;
+  margin: 0;
+}
+
+.title-word-3 {
+  color: #da0000; /* Iranian Flag Red */
+  font-size: 3rem;
+  font-weight: 900;
+  margin: 0;
 }
 
 /* Logo Styles */
@@ -86,7 +107,7 @@ body {
 
 .search-box h3 {
   margin: 0 0 15px 0;
-  color: #22c55e;
+  color: #ffffff; /* Changed from green to white */
   font-size: 1.2rem;
   text-align: center;
 }
@@ -105,7 +126,7 @@ body {
 
 .search-input:focus {
   outline: none;
-  border-color: #22c55e;
+  border-color: #ffffff; /* Changed from green to white */
 }
 
 /* Eitaa Link */
@@ -119,7 +140,7 @@ body {
 
 .eitaa-box h3 {
   margin: 0 0 15px 0;
-  color: #22c55e;
+  color: #ffffff; /* Changed from green to white */
   font-size: 1.2rem;
 }
 
@@ -130,7 +151,7 @@ body {
   gap: 10px;
   width: 100%;
   padding: 15px;
-  background: #22c55e;
+  background: #ef4444; /* Changed from green to red */
   color: #000;
   text-decoration: none;
   border-radius: 8px;
@@ -140,7 +161,7 @@ body {
 }
 
 .eitaa-link:hover {
-  background: #16a34a;
+  background: #dc2626; /* Darker red on hover */
   transform: translateY(-2px);
 }
 
@@ -164,7 +185,7 @@ body {
   border-radius: 12px;
   margin-bottom: 30px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-  border-right: 4px solid #22c55e;
+  border-right: 4px solid #ffffff; /* Changed from green to white */
   transition: transform 0.3s;
   overflow: hidden; /* Prevent content overflow */
 }
@@ -179,7 +200,7 @@ body {
 
 .article h2 {
   margin: 0 0 15px 0;
-  color: #22c55e;
+  color: #ffffff; /* Changed from green to white */
   font-size: 1.8rem;
   word-wrap: break-word;
 }
@@ -212,7 +233,7 @@ body {
 
 .loading {
   text-align: center;
-  color: #22c55e;
+  color: #ffffff; /* Changed from green to white */
   font-size: 1.2rem;
 }
 
@@ -234,13 +255,19 @@ body {
     position: static;
   }
   
-  .header h1 {
+  .title-word-1,
+  .title-word-2,
+  .title-word-3 {
     font-size: 1.8rem;
   }
   
   .header-content {
     flex-direction: column;
     text-align: center;
+  }
+  
+  .title-wrapper {
+    justify-content: center;
   }
   
   .logo {
@@ -260,7 +287,11 @@ body {
   <div class="header-content">
     <!-- Logo Image -->
     <img src="logo.png" alt="لوگو" class="logo" onerror="this.style.display='none'">
-    <h1>اخبار صحن ولیعصر</h1>
+    <div class="title-wrapper">
+      <h1 class="title-word-1">اخبار</h1>
+      <h1 class="title-word-2">صحن</h1>
+      <h1 class="title-word-3">ولیعصر</h1>
+    </div>
   </div>
 </div>
 
@@ -278,7 +309,7 @@ body {
     <div class="eitaa-box">
       <h3><i class="fas fa-paper-plane"></i> کانال ایتا</h3>
       <!-- REPLACE THE HREF BELOW WITH YOUR EITAA LINK -->
-      <a href="https://eitaa.com/valiasrfoari" class="eitaa-link" target="_blank">
+      <a href="https://eitaa.com/YOUR_CHANNEL" class="eitaa-link" target="_blank">
         <i class="fas fa-external-link-alt"></i>
         <span>عضویت در کانال</span>
       </a>
