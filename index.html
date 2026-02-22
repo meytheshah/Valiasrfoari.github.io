@@ -56,7 +56,6 @@ body {
   gap: 20px;
 }
 
-/* Navigation Menu - Centered */
 .nav-menu {
   width: 200px;
   flex-shrink: 0;
@@ -84,9 +83,9 @@ body {
 }
 
 .nav-item:hover { background: #1a1a1a; border-color: #ef4444; }
+.nav-item.active { background: #1a1a1a; border-color: #ef4444; }
 .nav-item i { color: #ef4444; }
 
-/* Pinned News Section */
 .pinned-section {
   width: 350px;
   flex-shrink: 0;
@@ -292,25 +291,16 @@ body {
 .loading { text-align: center; color: #ffffff; font-size: 1.2rem; padding: 40px; }
 .no-results { text-align: center; color: #888; padding: 40px; font-size: 1.2rem; }
 
-/* Desktop - Show Pinned Section */
 @media (min-width: 769px) {
-  .pinned-section {
-    display: block;
-  }
+  .pinned-section { display: block; }
+  .sidebar { display: block; }
 }
 
-/* Mobile */
 @media (max-width: 768px) {
-  .title-word-1,
-  .title-word-2,
-  .title-word-3 {
-    font-size: 1.8rem;
-  }
-  
+  .title-word-1, .title-word-2, .title-word-3 { font-size: 1.8rem; }
   .modal-article h1 { font-size: 1.8rem; }
   .modal-article .full-text { font-size: 1rem; }
   
-  /* Pinned Section on Mobile */
   .pinned-section {
     display: block;
     width: 100%;
@@ -328,19 +318,9 @@ body {
     -webkit-overflow-scrolling: touch;
   }
   
-  .pinned-wrapper::-webkit-scrollbar {
-    height: 4px;
-  }
-  
-  .pinned-wrapper::-webkit-scrollbar-track {
-    background: #111;
-    border-radius: 2px;
-  }
-  
-  .pinned-wrapper::-webkit-scrollbar-thumb {
-    background: #ef4444;
-    border-radius: 2px;
-  }
+  .pinned-wrapper::-webkit-scrollbar { height: 4px; }
+  .pinned-wrapper::-webkit-scrollbar-track { background: #111; border-radius: 2px; }
+  .pinned-wrapper::-webkit-scrollbar-thumb { background: #ef4444; border-radius: 2px; }
   
   .pinned-news {
     flex: 0 0 auto;
@@ -350,20 +330,9 @@ body {
     border-radius: 8px;
   }
   
-  .pinned-news video,
-  .pinned-news img {
-    max-height: 150px;
-  }
-  
-  .pinned-news .content {
-    padding: 10px;
-  }
-  
-  .pinned-news h3 {
-    font-size: 0.95rem;
-    margin-bottom: 5px;
-  }
-  
+  .pinned-news video, .pinned-news img { max-height: 150px; }
+  .pinned-news .content { padding: 10px; }
+  .pinned-news h3 { font-size: 0.95rem; margin-bottom: 5px; }
   .pinned-news p {
     font-size: 0.8rem;
     display: -webkit-box;
@@ -372,7 +341,6 @@ body {
     overflow: hidden;
   }
   
-  /* Navigation Menu - Centered on Mobile */
   .nav-menu {
     width: 100%;
     display: flex;
@@ -395,51 +363,9 @@ body {
     min-width: 100px;
   }
   
-  .sidebar {
-    width: 100%;
-    position: static;
-    order: 4;
-  }
-  
-  .container {
-    flex-direction: column;
-  }
-  
-  .main-news {
-    order: 3;
-  }
-  
-  /* Mobile Search at Bottom */
-  .mobile-search-container {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #111111;
-    padding: 15px;
-    border-top: 3px solid #ef4444;
-    z-index: 95;
-  }
-  
-  .mobile-search-container input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid #333;
-    background: #000;
-    color: #e5e7eb;
-    font-family: 'Vazirmatn', sans-serif;
-    font-size: 1rem;
-    border-radius: 8px;
-  }
-  
-  .mobile-search-container input:focus {
-    outline: none;
-    border-color: #ef4444;
-  }
-  
-  body {
-    padding-bottom: 80px;
-  }
+  .sidebar { display: none; }
+  .container { flex-direction: column; }
+  .main-news { order: 3; }
 }
 </style>
 </head>
@@ -457,12 +383,11 @@ body {
 
 <div class="container">
   <nav class="nav-menu">
-    <div class="nav-item" id="homeBtn"><i class="fas fa-home"></i> صفحه اصلی</div>
+    <div class="nav-item active" id="homeBtn"><i class="fas fa-home"></i> صفحه اصلی</div>
     <div class="nav-item" id="videoBtn"><i class="fas fa-video"></i> ویدیوها</div>
     <div class="nav-item" id="imageBtn"><i class="fas fa-images"></i> گالری تصاویر</div>
   </nav>
   
-  <!-- Pinned Section -->
   <aside class="pinned-section">
     <div class="pinned-title">
       <i class="fas fa-thumbtack"></i> اخبار ویژه
@@ -492,11 +417,6 @@ body {
   </aside>
 </div>
 
-<!-- Mobile Search at Bottom -->
-<div class="mobile-search-container" id="mobileSearchContainer" style="display: none;">
-  <input type="text" id="mobileSearchInput" placeholder="عنوان خبر را جستجو کنید...">
-</div>
-
 <div id="articleModal" class="modal">
   <button class="modal-close" onclick="closeModal()">
     <i class="fas fa-times"></i>
@@ -510,40 +430,40 @@ body {
 const newsContainer = document.getElementById("news");
 const pinnedNewsContainer = document.getElementById("pinnedNews");
 const searchInput = document.getElementById("searchInput");
-const mobileSearchInput = document.getElementById("mobileSearchInput");
-const mobileSearchContainer = document.getElementById("mobileSearchContainer");
 const modal = document.getElementById("articleModal");
 const modalContent = document.getElementById("modalArticleContent");
 const homeBtn = document.getElementById("homeBtn");
 const videoBtn = document.getElementById("videoBtn");
 const imageBtn = document.getElementById("imageBtn");
+const navItems = document.querySelectorAll('.nav-item');
 
 let allArticles = [];
 let fullArticlesData = [];
-let isMobile = window.innerWidth <= 768;
+let currentFilter = 'all';
 
-function checkMobile() {
-  isMobile = window.innerWidth <= 768;
-  if (isMobile) {
-    mobileSearchContainer.style.display = 'block';
-  } else {
-    mobileSearchContainer.style.display = 'none';
-  }
-}
-
-window.addEventListener('resize', checkMobile);
-checkMobile();
-
-homeBtn.addEventListener('click', () => {
+// Home button - Reset filter & scroll to top
+homeBtn.addEventListener('click', function() {
+  currentFilter = 'all';
+  navItems.forEach(item => item.classList.remove('active'));
+  homeBtn.classList.add('active');
+  filterByType('all');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-videoBtn.addEventListener('click', () => {
+// Video filter button
+videoBtn.addEventListener('click', function() {
+  currentFilter = 'video';
+  navItems.forEach(item => item.classList.remove('active'));
+  videoBtn.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   filterByType('video');
 });
 
-imageBtn.addEventListener('click', () => {
+// Image filter button
+imageBtn.addEventListener('click', function() {
+  currentFilter = 'image';
+  navItems.forEach(item => item.classList.remove('active'));
+  imageBtn.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   filterByType('image');
 });
@@ -582,13 +502,17 @@ async function loadNews() {
     allArticles = [];
     fullArticlesData = [];
 
-    for (let folder of pinnedList) {
-      await loadPinnedNews(folder);
-    }
+    // Load pinned news in parallel
+    const pinnedPromises = pinnedList.map(folder => loadPinnedNews(folder));
+    await Promise.all(pinnedPromises);
 
-    for (let folder of articlesList) {
-      await loadArticle(folder);
-    }
+    // Load ALL articles in parallel (including pinned ones)
+    const articlePromises = articlesList.map(folder => loadArticle(folder));
+    const articles = await Promise.all(articlePromises);
+    
+    articles.forEach(article => {
+      if (article) newsContainer.appendChild(article);
+    });
 
     if (newsContainer.children.length === 0) {
       newsContainer.innerHTML = "<p class='error'>هیچ خبری یافت نشد.</p>";
@@ -694,26 +618,29 @@ async function loadArticle(folder) {
     
     contentDiv.append(title, text);
     container.append(mediaElement, contentDiv);
-    newsContainer.appendChild(container);
     
     allArticles.push({ element: container, title: titleText.toLowerCase(), folder, type: mediaType });
     fullArticlesData.push({ folder, title: titleText.toLowerCase(), content: contentText, type: mediaType });
+    
+    return container;
   } catch (err) {
     console.error(`خطا در مقاله ${folder}:`, err);
+    return null;
   }
 }
 
 function filterByType(type) {
+  currentFilter = type;
   let visibleCount = 0;
   
   allArticles.forEach(article => {
-    if (type === 'video' && article.type === 'video') {
+    if (type === 'all') {
+      article.element.classList.remove('hidden');
+      visibleCount++;
+    } else if (type === 'video' && article.type === 'video') {
       article.element.classList.remove('hidden');
       visibleCount++;
     } else if (type === 'image' && article.type === 'img') {
-      article.element.classList.remove('hidden');
-      visibleCount++;
-    } else if (type === 'all') {
       article.element.classList.remove('hidden');
       visibleCount++;
     } else {
@@ -764,9 +691,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 function performSearch() {
-  const searchTerm = (searchInput.value || mobileSearchInput.value).toLowerCase().trim();
-  searchInput.value = searchTerm;
-  mobileSearchInput.value = searchTerm;
+  const searchTerm = searchInput.value.toLowerCase().trim();
   
   let visibleCount = 0;
   
@@ -791,7 +716,6 @@ function performSearch() {
 }
 
 searchInput.addEventListener('input', performSearch);
-mobileSearchInput.addEventListener('input', performSearch);
 
 loadNews();
 </script>
