@@ -215,24 +215,6 @@ body {
 .eitaa-link:hover { background: #dc2626; }
 .eitaa-link i { font-size: 1.3rem; }
 
-/* Loading Spinner */
-.loading-spinner {
-  text-align: center;
-  padding: 40px;
-  color: #ffffff;
-  font-size: 1.2rem;
-}
-
-.loading-spinner i {
-  animation: spin 1s linear infinite;
-  font-size: 2rem;
-  color: #ef4444;
-}
-
-@keyframes spin {
-  100% { transform: rotate(360deg); }
-}
-
 .modal {
   display: none;
   position: fixed;
@@ -417,10 +399,6 @@ body {
   
   <main class="main-news">
     <div id="news"><p class="loading">در حال بارگذاری اخبار...</p></div>
-    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
-      <i class="fas fa-spinner"></i>
-      <p>در حال بارگذاری اخبار بیشتر...</p>
-    </div>
   </main>
   
   <aside class="sidebar">
@@ -444,9 +422,7 @@ body {
     <i class="fas fa-times"></i>
   </button>
   <div class="modal-content">
-    <div id="modalArticleContent" class="modal-article">
-      <p class="loading">در حال بارگذاری...</p>
-    </div>
+    <div id="modalArticleContent" class="modal-article"></div>
   </div>
 </div>
 
@@ -460,36 +436,18 @@ const homeBtn = document.getElementById("homeBtn");
 const videoBtn = document.getElementById("videoBtn");
 const imageBtn = document.getElementById("imageBtn");
 const navItems = document.querySelectorAll('.nav-item');
-const loadingSpinner = document.getElementById("loadingSpinner");
 
 let allArticles = [];
-let pinnedArticles = [];
-let currentPage = 0;
-const PAGE_SIZE = 20;
+let fullArticlesData = [];
 let currentFilter = 'all';
-let isLoading = false;
-let hasMore = true;
-
-// Intersection Observer for lazy loading images
-const imageObserver = new IntersectionObserver((entries, observer) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const img = entry.target;
-      if (img.dataset.src) {
-        img.src = img.dataset.src;
-        img.removeAttribute('data-src');
-        observer.unobserve(img);
-      }
-    }
-  });
-}, { rootMargin: '200px' });
 
 // Home button - Reset filter & scroll to top
 homeBtn.addEventListener('click', function() {
   currentFilter = 'all';
   navItems.forEach(item => item.classList.remove('active'));
   homeBtn.classList.add('active');
-  resetAndLoad();
+  filterByType('all');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 // Video filter button
@@ -497,7 +455,8 @@ videoBtn.addEventListener('click', function() {
   currentFilter = 'video';
   navItems.forEach(item => item.classList.remove('active'));
   videoBtn.classList.add('active');
-  resetAndLoad();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  filterByType('video');
 });
 
 // Image filter button
@@ -505,16 +464,9 @@ imageBtn.addEventListener('click', function() {
   currentFilter = 'image';
   navItems.forEach(item => item.classList.remove('active'));
   imageBtn.classList.add('active');
-  resetAndLoad();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  filterByType('image');
 });
-
-function resetAndLoad() {
-  newsContainer.innerHTML = "";
-  currentPage = 0;
-  hasMore = true;
-  isLoading = false;
-  loadNextPage();
-}
 
 async function fetchText(url) {
   const response = await fetch(url);
@@ -533,27 +485,42 @@ async function loadNews() {
     if (!response.ok) throw new Error(`خطا: ${response.status}`);
     
     const data = await response.json();
+    let articlesList, pinnedList;
     
-    // New format with media types
-    if (data.pinned && data.articles) {
-      pinnedArticles = data.pinned;
-      allArticles = data.articles;
-    } else if (Array.isArray(data)) {
-      // Old format - assume all are images
-      pinnedArticles = data.slice(0, 1);
-      allArticles = data;
+    if (Array.isArray(data)) {
+      articlesList = data;
+      pinnedList = data.slice(0, 1);
+    } else if (data.pinned && data.articles) {
+      pinnedList = data.pinned;
+      articlesList = data.articles;
     } else {
       throw new Error('فرمت JSON نامعتبر');
     }
     
-    // Load pinned news
-    await loadPinnedNews();
+    newsContainer.innerHTML = "";
+    pinnedNewsContainer.innerHTML = "";
+    allArticles = [];
+    fullArticlesData = [];
+
+    // Load pinned news in parallel
+    const pinnedPromises = pinnedList.map(folder => loadPinnedNews(folder));
+    await Promise.all(pinnedPromises);
+
+    // Load ALL articles in parallel (including pinned ones)
+    const articlePromises = articlesList.map(folder => loadArticle(folder));
+    const articles = await Promise.all(articlePromises);
     
-    // Load first page of articles
-    loadNextPage();
-    
-    // Setup infinite scroll
-    window.addEventListener('scroll', handleScroll);
+    articles.forEach(article => {
+      if (article) newsContainer.appendChild(article);
+    });
+
+    if (newsContainer.children.length === 0) {
+      newsContainer.innerHTML = "<p class='error'>هیچ خبری یافت نشد.</p>";
+    }
+
+    if (pinnedNewsContainer.children.length === 0) {
+      pinnedNewsContainer.innerHTML = "<p class='error'>خبر ویژه‌ای وجود ندارد</p>";
+    }
 
   } catch (error) {
     console.error(error);
@@ -561,153 +528,104 @@ async function loadNews() {
   }
 }
 
-async function loadPinnedNews() {
-  pinnedNewsContainer.innerHTML = "";
-  
-  for (let folder of pinnedArticles) {
-    try {
-      const articleData = allArticles.find(a => a.folder === folder) || { folder, type: 'img' };
-      const fullText = await fetchText(`articles/${folder}/text.txt`);
-      const lines = fullText.split('\n');
-      const titleText = lines[0].trim();
-      const contentText = lines.slice(1).join('\n').trim();
-      
-      const pinnedContainer = document.createElement('div');
-      pinnedContainer.className = 'pinned-news';
-      pinnedContainer.onclick = () => openModal(folder, titleText, contentText, articleData.type);
-      
-      const mediaElement = createMediaElement(folder, articleData.type, false);
-      
-      const content = document.createElement('div');
-      content.className = 'content';
-      
-      const title = document.createElement('h3');
-      title.textContent = titleText;
-      
-      const text = document.createElement('p');
-      text.textContent = contentText.substring(0, 80) + '...';
-      
-      content.append(title, text);
-      pinnedContainer.append(mediaElement, content);
-      pinnedNewsContainer.appendChild(pinnedContainer);
-    } catch (err) {
-      console.error(`خطا در خبر ویژه ${folder}:`, err);
-    }
-  }
-  
-  if (pinnedNewsContainer.children.length === 0) {
-    pinnedNewsContainer.innerHTML = "<p class='error'>خبر ویژه‌ای وجود ندارد</p>";
-  }
-}
-
-function createMediaElement(folder, type, lazy = true) {
-  if (type === 'video') {
-    const video = document.createElement('video');
-    video.controls = true;
-    if (lazy) {
-      video.dataset.src = `articles/${folder}/cover.mp4`;
-      video.innerHTML = `<source src="" type="video/mp4">`;
-    } else {
-      video.src = `articles/${folder}/cover.mp4`;
-    }
-    return video;
-  } else {
-    const img = document.createElement('img');
-    if (lazy) {
-      img.dataset.src = `articles/${folder}/cover.jpg?t=${new Date().getTime()}`;
-      img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"%3E%3C/svg%3E';
-      img.loading = 'lazy';
-      imageObserver.observe(img);
-    } else {
-      img.src = `articles/${folder}/cover.jpg?t=${new Date().getTime()}`;
-    }
-    img.onerror = () => { img.style.display = 'none'; };
-    return img;
-  }
-}
-
-function loadNextPage() {
-  if (isLoading || !hasMore) return;
-  
-  isLoading = true;
-  loadingSpinner.style.display = 'block';
-  
-  const start = currentPage * PAGE_SIZE;
-  const end = start + PAGE_SIZE;
-  const pageArticles = allArticles.slice(start, end);
-  
-  if (pageArticles.length === 0) {
-    hasMore = false;
-    loadingSpinner.style.display = 'none';
-    return;
-  }
-  
-  // Create document fragment for better performance
-  const fragment = document.createDocumentFragment();
-  
-  pageArticles.forEach(async (articleData) => {
-    try {
-      const folder = articleData.folder || articleData;
-      const type = articleData.type || 'img';
-      const fullText = await fetchText(`articles/${folder}/text.txt`);
-      const lines = fullText.split('\n');
-      const titleText = lines[0].trim();
-      const contentText = lines.slice(1).join('\n').trim();
-      
-      const container = document.createElement("div");
-      container.className = "article";
-      if (currentFilter !== 'all') {
-        if ((currentFilter === 'video' && type !== 'video') ||
-            (currentFilter === 'image' && type !== 'img')) {
-          container.classList.add('hidden');
-        }
-      }
-      container.dataset.title = titleText.toLowerCase();
-      container.dataset.type = type;
-      container.onclick = () => openModal(folder, titleText, contentText, type);
-      
-      // Create media element with lazy loading
-      const mediaElement = createMediaElement(folder, type, true);
-      
-      const contentDiv = document.createElement("div");
-      contentDiv.className = "content";
-      
-      const title = document.createElement("h2");
-      title.textContent = titleText;
-      
-      const text = document.createElement("div");
-      text.className = "text";
-      text.textContent = contentText.substring(0, 150) + '...';
-      
-      contentDiv.append(title, text);
-      container.append(mediaElement, contentDiv);
-      fragment.appendChild(container);
-    } catch (err) {
-      console.error(`خطا در مقاله ${folder}:`, err);
-    }
-  });
-  
-  // Append all at once
-  setTimeout(() => {
-    newsContainer.appendChild(fragment);
-    currentPage++;
-    isLoading = false;
-    loadingSpinner.style.display = 'none';
+async function loadPinnedNews(folder) {
+  try {
+    const fullText = await fetchText(`articles/${folder}/text.txt`);
+    const lines = fullText.split('\n');
+    const titleText = lines[0].trim();
+    const contentText = lines.slice(1).join('\n').trim();
     
-    if (currentPage * PAGE_SIZE >= allArticles.length) {
-      hasMore = false;
+    const pinnedContainer = document.createElement('div');
+    pinnedContainer.className = 'pinned-news';
+    pinnedContainer.onclick = () => openModal(folder, titleText, contentText);
+    
+    let mediaElement, mediaType = 'img';
+    try {
+      const videoResponse = await fetch(`articles/${folder}/cover.mp4?t=${new Date().getTime()}`);
+      if (videoResponse.ok) {
+        mediaElement = document.createElement('video');
+        mediaElement.controls = true;
+        mediaElement.src = `articles/${folder}/cover.mp4`;
+        mediaType = 'video';
+      } else {
+        mediaElement = document.createElement('img');
+        mediaElement.src = `articles/${folder}/cover.jpg?t=${new Date().getTime()}`;
+      }
+    } catch (e) {
+      mediaElement = document.createElement('img');
+      mediaElement.src = `articles/${folder}/cover.jpg?t=${new Date().getTime()}`;
     }
-  }, 100);
+    mediaElement.onerror = () => { mediaElement.style.display = 'none'; };
+    
+    const content = document.createElement('div');
+    content.className = 'content';
+    
+    const title = document.createElement('h3');
+    title.textContent = titleText;
+    
+    const text = document.createElement('p');
+    text.textContent = contentText.substring(0, 80) + '...';
+    
+    content.append(title, text);
+    pinnedContainer.append(mediaElement, content);
+    pinnedNewsContainer.appendChild(pinnedContainer);
+    
+    fullArticlesData.push({ folder, title: titleText.toLowerCase(), content: contentText, type: mediaType });
+  } catch (err) {
+    console.error(`خطا در خبر ویژه ${folder}:`, err);
+  }
 }
 
-function handleScroll() {
-  if (!hasMore || isLoading) return;
-  
-  const scrollPosition = window.innerHeight + window.scrollY;
-  const threshold = document.body.offsetHeight - 200;
-  
-  if (scrollPosition >= threshold) {
-    loadNextPage();
+async function loadArticle(folder) {
+  try {
+    const fullText = await fetchText(`articles/${folder}/text.txt`);
+    const lines = fullText.split('\n');
+    const titleText = lines[0].trim();
+    const contentText = lines.slice(1).join('\n').trim();
+    
+    const container = document.createElement("div");
+    container.className = "article";
+    container.dataset.title = titleText.toLowerCase();
+    container.onclick = () => openModal(folder, titleText, contentText);
+    
+    let mediaElement, mediaType = 'img';
+    try {
+      const videoResponse = await fetch(`articles/${folder}/cover.mp4?t=${new Date().getTime()}`);
+      if (videoResponse.ok) {
+        mediaElement = document.createElement('video');
+        mediaElement.controls = true;
+        mediaElement.src = `articles/${folder}/cover.mp4`;
+        mediaType = 'video';
+      } else {
+        mediaElement = document.createElement('img');
+        mediaElement.src = `articles/${folder}/cover.jpg?t=${new Date().getTime()}`;
+      }
+    } catch (e) {
+      mediaElement = document.createElement('img');
+      mediaElement.src = `articles/${folder}/cover.jpg?t=${new Date().getTime()}`;
+    }
+    mediaElement.onerror = () => { mediaElement.style.display = 'none'; };
+    
+    const contentDiv = document.createElement("div");
+    contentDiv.className = "content";
+    
+    const title = document.createElement("h2");
+    title.textContent = titleText;
+    
+    const text = document.createElement("div");
+    text.className = "text";
+    text.textContent = contentText.substring(0, 150) + '...';
+    
+    contentDiv.append(title, text);
+    container.append(mediaElement, contentDiv);
+    
+    allArticles.push({ element: container, title: titleText.toLowerCase(), folder, type: mediaType });
+    fullArticlesData.push({ folder, title: titleText.toLowerCase(), content: contentText, type: mediaType });
+    
+    return container;
+  } catch (err) {
+    console.error(`خطا در مقاله ${folder}:`, err);
+    return null;
   }
 }
 
@@ -715,20 +633,18 @@ function filterByType(type) {
   currentFilter = type;
   let visibleCount = 0;
   
-  const articles = document.querySelectorAll('.article');
-  articles.forEach(article => {
-    const articleType = article.dataset.type;
+  allArticles.forEach(article => {
     if (type === 'all') {
-      article.classList.remove('hidden');
+      article.element.classList.remove('hidden');
       visibleCount++;
-    } else if (type === 'video' && articleType === 'video') {
-      article.classList.remove('hidden');
+    } else if (type === 'video' && article.type === 'video') {
+      article.element.classList.remove('hidden');
       visibleCount++;
-    } else if (type === 'image' && articleType === 'img') {
-      article.classList.remove('hidden');
+    } else if (type === 'image' && article.type === 'img') {
+      article.element.classList.remove('hidden');
       visibleCount++;
     } else {
-      article.classList.add('hidden');
+      article.element.classList.add('hidden');
     }
   });
   
@@ -743,31 +659,22 @@ function filterByType(type) {
   }
 }
 
-async function openModal(folder, title, content, type) {
-  modalContent.innerHTML = '<p class="loading">در حال بارگذاری...</p>';
+function openModal(folder, title, content) {
+  let mediaHTML = `<img src="articles/${folder}/cover.jpg?t=${new Date().getTime()}" alt="${title}" onerror="this.style.display='none'" style="width:100%;max-height:700px;display:block;margin-bottom:30px;background:#000">`;
+  
+  fetch(`articles/${folder}/cover.mp4?t=${new Date().getTime()}`)
+    .then(response => {
+      if (response.ok) {
+        mediaHTML = `<video controls src="articles/${folder}/cover.mp4" style="width:100%;max-height:700px;display:block;margin-bottom:30px;background:#000"></video>`;
+      }
+      modalContent.innerHTML = `${mediaHTML}<h1>${title}</h1><div class="full-text">${content}</div>`;
+    })
+    .catch(() => {
+      modalContent.innerHTML = `${mediaHTML}<h1>${title}</h1><div class="full-text">${content}</div>`;
+    });
+  
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
-  
-  try {
-    const fullText = await fetchText(`articles/${folder}/text.txt`);
-    const lines = fullText.split('\n');
-    const fullContent = lines.slice(1).join('\n').trim();
-    
-    let mediaHTML = '';
-    if (type === 'video') {
-      mediaHTML = `<video controls src="articles/${folder}/cover.mp4" style="width:100%;max-height:700px;display:block;margin-bottom:30px;background:#000"></video>`;
-    } else {
-      mediaHTML = `<img src="articles/${folder}/cover.jpg?t=${new Date().getTime()}" alt="${title}" style="width:100%;max-height:700px;display:block;margin-bottom:30px;background:#000">`;
-    }
-    
-    modalContent.innerHTML = `
-      ${mediaHTML}
-      <h1>${title}</h1>
-      <div class="full-text">${fullContent}</div>
-    `;
-  } catch (err) {
-    modalContent.innerHTML = `<p class="error">خطا در بارگذاری خبر: ${err.message}</p>`;
-  }
 }
 
 function closeModal() {
@@ -787,15 +694,13 @@ function performSearch() {
   const searchTerm = searchInput.value.toLowerCase().trim();
   
   let visibleCount = 0;
-  const articles = document.querySelectorAll('.article');
   
-  articles.forEach(article => {
-    const title = article.dataset.title || '';
-    if (searchTerm === '' || title.includes(searchTerm)) {
-      article.classList.remove('hidden');
+  allArticles.forEach(article => {
+    if (searchTerm === '' || article.title.includes(searchTerm)) {
+      article.element.classList.remove('hidden');
       visibleCount++;
     } else {
-      article.classList.add('hidden');
+      article.element.classList.add('hidden');
     }
   });
   
@@ -812,7 +717,6 @@ function performSearch() {
 
 searchInput.addEventListener('input', performSearch);
 
-// Initialize
 loadNews();
 </script>
 
