@@ -4,176 +4,276 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>اخبار صحن ولیعصر</title>
-
 <link rel="icon" type="image/png" href="logo.png">
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Vazirmatn;background:#000;color:#e5e7eb}
-.header{background:#111;padding:15px;border-bottom:3px solid #ef4444;position:sticky;top:0;z-index:100}
-.title-wrapper{display:flex;gap:15px;justify-content:center}
-.title-word-1{color:#239f40;font-size:2.2rem;font-weight:900}
-.title-word-2{color:#fff;font-size:2.2rem;font-weight:900}
-.title-word-3{color:#da0000;font-size:2.2rem;font-weight:900}
-.container{display:flex;gap:20px;max-width:1400px;margin:auto;padding:20px}
-.nav-menu{width:200px;display:flex;flex-direction:column}
-.nav-item{padding:12px;background:#111;border:2px solid #222;margin-bottom:10px;cursor:pointer;text-align:center}
-.nav-item.active,.nav-item:hover{border-color:#ef4444}
-.pinned-section{width:330px}
-.pinned-news,.article{background:#111;border:2px solid #222;margin-bottom:15px;cursor:pointer}
-.pinned-news:hover,.article:hover{border-color:#ef4444}
-.pinned-news img,.pinned-news video,
-.article img,.article video{width:100%;background:#000;object-fit:contain}
-.content{padding:15px}
-.article.hidden{display:none}
-.modal{display:none;position:fixed;inset:0;background:#000;z-index:1000}
-.modal.active{display:block}
-.modal-content{max-width:900px;margin:auto;padding:60px 20px}
-.modal-close{position:fixed;top:20px;left:20px;width:45px;height:45px;background:#ef4444;border:none;font-size:1.5rem;cursor:pointer}
-.full-text{white-space:pre-wrap;line-height:2}
-@media(max-width:768px){
-.container{flex-direction:column}
-.nav-menu{flex-direction:row;width:100%;justify-content:center}
+* { box-sizing: border-box; }
+body { background: #000; color: #e5e7eb; font-family: 'Vazirmatn', sans-serif; margin:0; padding:0; }
+.header { 
+  background: #111; padding: 10px 20px; border-bottom: 3px solid #ef4444; position: sticky; top:0; z-index:100; overflow:hidden; height:90px;
 }
+.header::before {
+  content:"";
+  position:absolute;
+  inset:-40%;
+  background: url("iran-flag.png") no-repeat center;
+  background-size: 180%;
+  transform: rotate(-8deg);
+  opacity:0.15;
+  z-index:-1;
+}
+.header-content { max-width:1400px; margin:0 auto; display:flex; align-items:center; justify-content:center; gap:10px; position:relative; z-index:1; }
+.title-wrapper { display:flex; gap:10px; justify-content:center; align-items:center; position:relative; z-index:1; }
+.title-wrapper h1 { margin:0; text-shadow:1px 1px 3px rgba(0,0,0,0.6); }
+.title-word-1 { color:#239f40; font-size:2rem; font-weight:900; }
+.title-word-2 { color:#fff; font-size:2rem; font-weight:900; }
+.title-word-3 { color:#da0000; font-size:2rem; font-weight:900; }
+
+.container { display:flex; max-width:1400px; margin:0 auto; padding:20px; gap:20px; }
+.nav-menu { width:200px; flex-shrink:0; position:sticky; top:120px; height:fit-content; display:flex; flex-direction:column; align-items:center; }
+.nav-item { background:#111; padding:12px 20px; margin-bottom:10px; border:2px solid #222; cursor:pointer; transition:all 0.3s; display:flex; align-items:center; justify-content:center; gap:10px; width:100%; text-align:center; }
+.nav-item:hover, .nav-item.active { background:#1a1a1a; border-color:#ef4444; }
+.nav-item i { color:#ef4444; }
+
+.pinned-section { width:350px; flex-shrink:0; position:sticky; top:120px; max-height:calc(100vh - 140px); overflow-x:auto; overflow-y:hidden; }
+.pinned-title { background:#111; padding:10px; border:2px solid #ef4444; margin-bottom:10px; text-align:center; font-size:1.1rem; font-weight:bold; color:#ef4444; }
+.pinned-wrapper { display:flex; gap:10px; overflow-x:auto; scroll-behavior:smooth; padding:5px; -webkit-overflow-scrolling:touch; }
+.pinned-wrapper::-webkit-scrollbar { height:6px; }
+.pinned-wrapper::-webkit-scrollbar-track { background:#111; border-radius:3px; }
+.pinned-wrapper::-webkit-scrollbar-thumb { background:#ef4444; border-radius:3px; }
+
+.pinned-news { background:#111; border:2px solid #333; cursor:pointer; transition:all 0.3s; flex:0 0 auto; width:300px; min-width:280px; border-radius:6px; }
+.pinned-news:hover { border-color:#ef4444; }
+.pinned-news video, .pinned-news img { width:100%; max-height:180px; object-fit:contain; display:block; background:#000; }
+.pinned-news .content { padding:10px; }
+.pinned-news h3 { margin:0 0 5px 0; font-size:1rem; color:#fff; }
+.pinned-news p { margin:0; font-size:0.85rem; color:#cbd5e1; line-height:1.4; overflow:hidden; text-overflow:ellipsis; }
+
+.main-news { flex:1; display:flex; flex-direction:column; gap:20px; }
+.article { background:#111; border:2px solid #222; cursor:pointer; transition:all 0.3s; overflow:hidden; }
+.article:hover { border-color:#ef4444; transform:translateY(-2px); }
+.article.hidden { display:none; }
+.article img, .article video { width:100%; height:auto; max-height:600px; object-fit:contain; display:block; background:#000; }
+.article .content { padding:15px; }
+.article h2 { margin:0 0 10px 0; font-size:1.3rem; color:#fff; }
+.article .text { color:#cbd5e1; line-height:1.6; font-size:0.95rem; }
+
+.sidebar { width:250px; flex-shrink:0; position:sticky; top:120px; height:fit-content; }
+.search-box { background:#111; padding:15px; margin-bottom:15px; border:2px solid #222; }
+.search-box h3 { margin:0 0 10px 0; color:#fff; font-size:1.1rem; text-align:center; }
+.search-input { width:100%; padding:10px; border:2px solid #333; background:#000; color:#e5e7eb; font-family:'Vazirmatn',sans-serif; font-size:0.95rem; }
+.search-input:focus { outline:none; border-color:#fff; }
+
+.eitaa-box { background:#111; padding:15px; border:2px solid #222; text-align:center; }
+.eitaa-box h3 { margin:0 0 10px 0; color:#fff; font-size:1.1rem; }
+.eitaa-link { display:inline-flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:10px; background:#ef4444; color:#000; text-decoration:none; font-weight:bold; font-size:1rem; transition:all 0.3s; }
+.eitaa-link:hover { background:#dc2626; }
+.eitaa-link i { font-size:1.2rem; }
+
+.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:1000; overflow-y:auto; }
+.modal.active { display:block; }
+.modal-content { max-width:1000px; margin:0 auto; padding:50px 20px 40px; }
+.modal-close { position:fixed; top:20px; left:20px; background:#ef4444; color:#000; border:none; width:50px; height:50px; font-size:1.5rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.3s; z-index:1001; }
+.modal-close:hover { background:#dc2626; transform:rotate(90deg); }
+.modal-article { background:#111; border:3px solid #ef4444; padding:20px; }
+.modal-article img, .modal-article video { width:100%; max-height:700px; object-fit:contain; display:block; margin-bottom:20px; background:#000; }
+.modal-article h1 { color:#fff; font-size:2rem; margin:0 0 20px 0; border-bottom:2px solid #ef4444; padding-bottom:10px; }
+.modal-article .full-text { color:#cbd5e1; line-height:1.8; font-size:1rem; white-space:pre-wrap; }
+
+.error { color:#ef4444; text-align:center; font-size:1.2rem; padding:40px; }
+.loading { text-align:center; color:#fff; font-size:1.2rem; padding:40px; }
+.no-results { text-align:center; color:#888; padding:40px; font-size:1.2rem; }
+
+@media (max-width:768px){
+  .container { flex-direction:column; }
+  .nav-menu { width:100%; flex-direction:row; justify-content:center; gap:10px; position:static; margin-bottom:10px; }
+  .nav-item { white-space:nowrap; margin-bottom:0; padding:10px 15px; font-size:0.85rem; min-width:80px; }
+  .sidebar { display:none; }
+  .main-news { order:3; }
+  .pinned-section { width:100%; max-height:none; position:static; margin-bottom:10px; }
+  .pinned-news { width:280px; min-width:280px; max-height:150px; }
+  .pinned-news img, .pinned-news video { max-height:150px; }
+  .pinned-news .content { padding:8px; }
+  .pinned-news h3 { font-size:0.9rem; margin-bottom:4px; }
+  .pinned-news p { font-size:0.75rem; -webkit-line-clamp:2; -webkit-box-orient:vertical; display:-webkit-box; overflow:hidden; }
+}
+
+/* Scrollbar for pinned section */
+.pinned-wrapper::-webkit-scrollbar { height:6px; }
+.pinned-wrapper::-webkit-scrollbar-thumb { background:#ef4444; border-radius:3px; }
 </style>
 </head>
-
 <body>
 
 <div class="header">
-  <div class="title-wrapper">
-    <h1 class="title-word-1">اخبار</h1>
-    <h1 class="title-word-2">صحن</h1>
-    <h1 class="title-word-3">ولیعصر</h1>
+  <div class="header-content">
+    <div class="title-wrapper">
+      <h1 class="title-word-1">اخبار</h1>
+      <h1 class="title-word-2">صحن</h1>
+      <h1 class="title-word-3">ولیعصر</h1>
+    </div>
   </div>
 </div>
 
 <div class="container">
-
-<nav class="nav-menu">
-  <div class="nav-item active" id="homeBtn">همه</div>
-  <div class="nav-item" id="videoBtn">ویدیو</div>
-  <div class="nav-item" id="imageBtn">تصویر</div>
-</nav>
-
-<aside class="pinned-section">
-  <h3>📌 اخبار ویژه</h3>
-  <div id="pinnedNews">در حال بارگذاری...</div>
-</aside>
-
-<main style="flex:1">
-  <div id="news">در حال بارگذاری...</div>
-</main>
-
+  <nav class="nav-menu">
+    <div class="nav-item active" id="homeBtn"><i class="fas fa-home"></i> صفحه اصلی</div>
+    <div class="nav-item" id="videoBtn"><i class="fas fa-video"></i> ویدیوها</div>
+    <div class="nav-item" id="imageBtn"><i class="fas fa-images"></i> گالری تصاویر</div>
+  </nav>
+  
+  <aside class="pinned-section">
+    <div class="pinned-title"><i class="fas fa-thumbtack"></i> اخبار ویژه</div>
+    <div class="pinned-wrapper" id="pinnedNews"><p class="loading">در حال بارگذاری...</p></div>
+  </aside>
+  
+  <main class="main-news">
+    <div id="news"><p class="loading">در حال بارگذاری اخبار...</p></div>
+  </main>
+  
+  <aside class="sidebar">
+    <div class="search-box">
+      <h3><i class="fas fa-search"></i> جستجو</h3>
+      <input type="text" class="search-input" id="searchInput" placeholder="عنوان خبر را جستجو کنید...">
+    </div>
+    
+    <div class="eitaa-box">
+      <h3><i class="fas fa-paper-plane"></i> کانال ایتا</h3>
+      <a href="https://eitaa.com/valiasrfoari" class="eitaa-link" target="_blank">
+        <i class="fas fa-external-link-alt"></i>
+        <span>عضویت در کانال</span>
+      </a>
+    </div>
+  </aside>
 </div>
 
-<div id="modal" class="modal">
-  <button class="modal-close" onclick="closeModal()">×</button>
-  <div class="modal-content" id="modalContent"></div>
+<div id="articleModal" class="modal">
+  <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+  <div class="modal-content">
+    <div id="modalArticleContent" class="modal-article"></div>
+  </div>
 </div>
 
 <script>
-const newsEl = document.getElementById('news');
-const pinnedEl = document.getElementById('pinnedNews');
-const modal = document.getElementById('modal');
-const modalContent = document.getElementById('modalContent');
+// --- JS همان نسخه قبلی با fetch موازی و فیلتر ---
+const newsContainer = document.getElementById("news");
+const pinnedNewsContainer = document.getElementById("pinnedNews");
+const searchInput = document.getElementById("searchInput");
+const modal = document.getElementById("articleModal");
+const modalContent = document.getElementById("modalArticleContent");
+const homeBtn = document.getElementById("homeBtn");
+const videoBtn = document.getElementById("videoBtn");
+const imageBtn = document.getElementById("imageBtn");
+const navItems = document.querySelectorAll('.nav-item');
 
-const textCache = new Map();
 let allArticles = [];
+let fullArticlesData = [];
+let currentFilter = 'all';
 
-async function fetchText(url){
-  if(textCache.has(url)) return textCache.get(url);
-  const r = await fetch(url,{cache:'force-cache'});
-  const t = await r.text();
-  textCache.set(url,t);
-  return t;
-}
+homeBtn.addEventListener('click',()=>{currentFilter='all'; navItems.forEach(i=>i.classList.remove('active')); homeBtn.classList.add('active'); filterByType('all'); window.scrollTo({top:0,behavior:'smooth'});});
+videoBtn.addEventListener('click',()=>{currentFilter='video'; navItems.forEach(i=>i.classList.remove('active')); videoBtn.classList.add('active'); filterByType('video'); window.scrollTo({top:0,behavior:'smooth'});});
+imageBtn.addEventListener('click',()=>{currentFilter='image'; navItems.forEach(i=>i.classList.remove('active')); imageBtn.classList.add('active'); filterByType('image'); window.scrollTo({top:0,behavior:'smooth'});});
 
-function createMedia(folder){
-  const video = document.createElement('video');
-  video.src = `articles/${folder}/cover.mp4`;
-  video.controls = true;
-  video.preload = 'metadata';
-  video.loading = 'lazy';
-
-  video.onerror = ()=>{
-    const img = document.createElement('img');
-    img.src = `articles/${folder}/cover.jpg`;
-    img.loading = 'lazy';
-    video.replaceWith(img);
-  };
-  return video;
-}
-
-async function loadArticle(folder, target){
-  try{
-    const txt = await fetchText(`articles/${folder}/text.txt`);
-    const [title,...rest] = txt.split('\n');
-    const body = rest.join('\n');
-
-    const box = document.createElement('div');
-    box.className = target === 'pinned' ? 'pinned-news' : 'article';
-    box.onclick = ()=>openModal(folder,title,body);
-
-    const content = document.createElement('div');
-    content.className = 'content';
-    content.innerHTML = `<h3>${title}</h3><p>${body.slice(0,120)}...</p>`;
-
-    const media = createMedia(folder);
-
-    box.append(content);
-    box.prepend(media);
-
-    if(target === 'main'){
-      allArticles.push({el:box, type:media.tagName === 'VIDEO' ? 'video':'img'});
-    }
-    return box;
-  }catch{ return null; }
-}
+async function fetchText(url){const r=await fetch(url); if(!r.ok) throw new Error(`خطا در بارگذاری ${url}`); return await r.text();}
 
 async function loadNews(){
-  const data = await fetch('articles/index.json').then(r=>r.json());
-
-  pinnedEl.innerHTML='';
-  newsEl.innerHTML='';
-  allArticles=[];
-
-  for(const f of data.pinned){
-    const a = await loadArticle(f,'pinned');
-    if(a) pinnedEl.appendChild(a);
-  }
-
-  for(let i=0;i<data.articles.length;i++){
-    const a = await loadArticle(data.articles[i],'main');
-    if(a) newsEl.appendChild(a);
-    if(i%3===0) await new Promise(r=>setTimeout(r,0));
-  }
+  try{
+    const timestamp=new Date().getTime();
+    const response=await fetch(`articles/index.json?t=${timestamp}`,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});
+    if(!response.ok) throw new Error(`خطا: ${response.status}`);
+    const data=await response.json();
+    let articlesList,pinnedList;
+    if(Array.isArray(data)){articlesList=data; pinnedList=data.slice(0,1);}
+    else if(data.pinned && data.articles){pinnedList=data.pinned; articlesList=data.articles;}
+    else throw new Error('فرمت JSON نامعتبر');
+    
+    newsContainer.innerHTML=""; pinnedNewsContainer.innerHTML="";
+    allArticles=[]; fullArticlesData=[];
+    
+    await Promise.all(pinnedList.map(folder=>loadPinnedNews(folder)));
+    const articleElems=await Promise.all(articlesList.map(folder=>loadArticle(folder)));
+    articleElems.forEach(a=>{if(a) newsContainer.appendChild(a);});
+    
+    if(newsContainer.children.length===0) newsContainer.innerHTML="<p class='error'>هیچ خبری یافت نشد.</p>";
+    if(pinnedNewsContainer.children.length===0) pinnedNewsContainer.innerHTML="<p class='error'>خبر ویژه‌ای وجود ندارد</p>";
+  }catch(e){console.error(e); newsContainer.innerHTML=`<p class='error'>خطا: ${e.message}</p>`;}
 }
 
-function filter(type){
-  allArticles.forEach(a=>{
-    a.el.classList.toggle('hidden', type!=='all' && a.type!==type);
-  });
+async function loadPinnedNews(folder){
+  try{
+    const fullText=await fetchText(`articles/${folder}/text.txt`);
+    const lines=fullText.split('\n');
+    const titleText=lines[0].trim();
+    const contentText=lines.slice(1).join('\n').trim();
+    
+    const pinnedContainer=document.createElement('div'); pinnedContainer.className='pinned-news';
+    pinnedContainer.onclick=()=>openModal(folder,titleText,contentText);
+    
+    let mediaElement,mediaType='img';
+    try{const r=await fetch(`articles/${folder}/cover.mp4?t=${new Date().getTime()}`); if(r.ok){mediaElement=document.createElement('video'); mediaElement.controls=true; mediaElement.src=`articles/${folder}/cover.mp4`; mediaType='video';} else{mediaElement=document.createElement('img'); mediaElement.src=`articles/${folder}/cover.jpg?t=${new Date().getTime()}`;}}catch{mediaElement=document.createElement('img'); mediaElement.src=`articles/${folder}/cover.jpg?t=${new Date().getTime()}`;}
+    mediaElement.onerror=()=>{mediaElement.style.display='none';};
+    
+    const content=document.createElement('div'); content.className='content';
+    const title=document.createElement('h3'); title.textContent=titleText;
+    const text=document.createElement('p'); text.textContent=contentText.substring(0,80)+'...';
+    content.append(title,text); pinnedContainer.append(mediaElement,content);
+    pinnedNewsContainer.appendChild(pinnedContainer);
+    fullArticlesData.push({folder,title:titleText.toLowerCase(),content:contentText,type:mediaType});
+  }catch(err){console.error(`خطا در خبر ویژه ${folder}:`,err);}
 }
 
-function openModal(folder,title,body){
-  modalContent.innerHTML = `
-    <video src="articles/${folder}/cover.mp4" controls onerror="this.replaceWith(Object.assign(document.createElement('img'),{src:'articles/${folder}/cover.jpg'}))"></video>
-    <h1>${title}</h1>
-    <div class="full-text">${body}</div>`;
-  modal.classList.add('active');
+async function loadArticle(folder){
+  try{
+    const fullText=await fetchText(`articles/${folder}/text.txt`);
+    const lines=fullText.split('\n'); const titleText=lines[0].trim(); const contentText=lines.slice(1).join('\n').trim();
+    
+    const container=document.createElement("div"); container.className="article"; container.dataset.title=titleText.toLowerCase();
+    container.onclick=()=>openModal(folder,titleText,contentText);
+    
+    let mediaElement, mediaType='img';
+    try{const r=await fetch(`articles/${folder}/cover.mp4?t=${new Date().getTime()}`); if(r.ok){mediaElement=document.createElement('video'); mediaElement.controls=true; mediaElement.src=`articles/${folder}/cover.mp4`; mediaType='video';} else{mediaElement=document.createElement('img'); mediaElement.src=`articles/${folder}/cover.jpg?t=${new Date().getTime()}`;}}catch{mediaElement=document.createElement('img'); mediaElement.src=`articles/${folder}/cover.jpg?t=${new Date().getTime()}`;}
+    mediaElement.onerror=()=>{mediaElement.style.display='none';};
+    
+    const contentDiv=document.createElement("div"); contentDiv.className="content";
+    const title=document.createElement("h2"); title.textContent=titleText;
+    const text=document.createElement("div"); text.className="text"; text.textContent=contentText.substring(0,150)+'...';
+    contentDiv.append(title,text); container.append(mediaElement,contentDiv);
+    
+    allArticles.push({element:container,title:titleText.toLowerCase(),folder,type:mediaType});
+    fullArticlesData.push({folder,title:titleText.toLowerCase(),content:contentText,type:mediaType});
+    
+    return container;
+  }catch(err){console.error(`خطا در مقاله ${folder}:`,err); return null;}
 }
 
-function closeModal(){ modal.classList.remove('active'); }
+function filterByType(type){
+  currentFilter=type; let visibleCount=0;
+  allArticles.forEach(a=>{if(type==='all'||(type==='video'&&a.type==='video')||(type==='image'&&a.type==='img')){a.element.classList.remove('hidden'); visibleCount++;} else a.element.classList.add('hidden');});
+  const existing=document.querySelector('.no-results'); if(existing) existing.remove();
+  if(visibleCount===0 && type!=='all'){const noRes=document.createElement('p'); noRes.className='no-results'; noRes.textContent=type==='video'?'هیچ ویدیویی یافت نشد.':'هیچ تصویری یافت نشد.'; newsContainer.appendChild(noRes);}
+}
 
-homeBtn.onclick=()=>filter('all');
-videoBtn.onclick=()=>filter('video');
-imageBtn.onclick=()=>filter('img');
+function openModal(folder,title,content){
+  let mediaHTML=`<img src="articles/${folder}/cover.jpg?t=${new Date().getTime()}" alt="${title}" style="width:100%;max-height:700px;display:block;margin-bottom:20px;background:#000" onerror="this.style.display='none'">`;
+  fetch(`articles/${folder}/cover.mp4?t=${new Date().getTime()}`).then(r=>{if(r.ok) mediaHTML=`<video controls src="articles/${folder}/cover.mp4" style="width:100%;max-height:700px;display:block;margin-bottom:20px;background:#000"></video>`; modalContent.innerHTML=`${mediaHTML}<h1>${title}</h1><div class="full-text">${content}</div>`;}).catch(()=>{modalContent.innerHTML=`${mediaHTML}<h1>${title}</h1><div class="full-text">${content}</div>`;});
+  modal.classList.add('active'); document.body.style.overflow='hidden';
+}
+
+function closeModal(){modal.classList.remove('active'); document.body.style.overflow='auto';}
+modal.addEventListener('click',e=>{if(e.target===modal) closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape' && modal.classList.contains('active')) closeModal();});
+
+function performSearch(){
+  const term=searchInput.value.toLowerCase().trim(); let visibleCount=0;
+  allArticles.forEach(a=>{if(term===''||a.title.includes(term)){a.element.classList.remove('hidden'); visibleCount++;} else a.element.classList.add('hidden');});
+  const existing=document.querySelector('.no-results'); if(existing) existing.remove();
+  if(visibleCount===0 && term!==''){const noRes=document.createElement('p'); noRes.className='no-results'; noRes.textContent='هیچ خبری با این عنوان یافت نشد.'; newsContainer.appendChild(noRes);}
+}
+searchInput.addEventListener('input',performSearch);
 
 loadNews();
 </script>
-
 </body>
 </html>
