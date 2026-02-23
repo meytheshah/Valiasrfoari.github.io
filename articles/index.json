@@ -1,21 +1,23 @@
 {
   "pinned": [
-    { "folder": "h13", "type": "video" },
-    { "folder": "h4", "type": "video" }
+    "h15",
+    "h14"
   ],
   "articles": [
-    { "folder": "h13", "type": "video" },
-    { "folder": "h12", "type": "img" },
-    { "folder": "h11", "type": "img" },
-    { "folder": "h10", "type": "video" },
-    { "folder": "h9", "type": "img" },
-    { "folder": "h8", "type": "img" },
-    { "folder": "h7", "type": "img" },
-    { "folder": "h6", "type": "img" },
-    { "folder": "h5", "type": "img" },
-    { "folder": "h4", "type": "video" },
-    { "folder": "h3", "type": "img" },
-    { "folder": "h2", "type": "img" },
-    { "folder": "h1", "type": "img" }
+    "h15"
+    "h14",
+    "h13",
+    "h12",
+    "h11",
+    "h10",
+    "h9",
+    "h8",
+    "h7",
+    "h6",
+    "h5",
+    "h4",
+    "h3",
+    "h2",
+    "h1"
   ]
 }
