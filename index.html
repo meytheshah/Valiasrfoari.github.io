@@ -1,90 +1,394 @@
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>اخبار صحن ولیعصر</title>
 <link rel="icon" type="image/png" href="logo.png">
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Preconnect to CDNs for faster loading -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<!-- Load fonts with display=swap for faster text rendering -->
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+<noscript>
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</noscript>
 
 <style>
 * { box-sizing: border-box; }
-body { background:#000;color:#e5e7eb;font-family:'Vazirmatn',sans-serif;margin:0;padding:0; }
-.header { background:#111;padding:15px 20px;border-bottom:3px solid #ef4444;position:sticky;top:0;z-index:100; }
-.header-content { max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:20px; }
-.title-wrapper { display:flex; gap:15px; justify-content:center; align-items:center; }
-.title-word-1 { color:#239f40;font-size:2.5rem;font-weight:900;margin:0; }
-.title-word-2 { color:#fff;font-size:2.5rem;font-weight:900;margin:0; }
-.title-word-3 { color:#da0000;font-size:2.5rem;font-weight:900;margin:0; }
-.container { display:flex; max-width:1400px; margin:0 auto; padding:20px; gap:20px; }
-.nav-menu { width:200px; flex-shrink:0; position:sticky; top:120px; height:fit-content; display:flex; flex-direction:column; align-items:center; }
-.nav-item { background:#111; padding:15px 20px; margin-bottom:10px; border:2px solid #222; cursor:pointer; transition:all 0.3s; display:flex; align-items:center; justify-content:center; gap:10px; width:100%; text-align:center; }
-.nav-item:hover { background:#1a1a1a;border-color:#ef4444; }
-.nav-item.active { background:#1a1a1a;border-color:#ef4444; }
-.nav-item i { color:#ef4444; }
-.pinned-section { width:350px; flex-shrink:0; position:sticky; top:120px; height:fit-content; max-height:calc(100vh - 140px); overflow-y:auto; }
-.pinned-title { background:#111; padding:15px; border:2px solid #ef4444; margin-bottom:15px; text-align:center; font-size:1.3rem; font-weight:bold; color:#ef4444; }
-.pinned-news { background:#111;border:2px solid #333;overflow:hidden;margin-bottom:15px;cursor:pointer;transition:all 0.3s; }
-.pinned-news:hover { border-color:#ef4444; }
-.pinned-news video,.pinned-news img { width:100%; height:auto; max-height:300px; object-fit:contain; display:block; background:#000; }
-.pinned-news .content { padding:15px; }
-.pinned-news h3 { margin:0 0 10px 0; color:#fff; font-size:1.1rem; }
-.pinned-news p { margin:0; color:#cbd5e1; line-height:1.6; font-size:0.9rem; }
-.main-news { flex:1; display:flex; flex-direction:column; gap:20px; }
-.article { background:#111;border:2px solid #222;cursor:pointer;transition:all 0.3s;overflow:hidden; }
-.article:hover { border-color:#ef4444; transform:translateY(-2px); }
-.article.hidden { display:none; }
-.article img,.article video { width:100%; height:auto; max-height:600px; object-fit:contain; display:block; background:#000; }
-.article .content { padding:20px; }
-.article h2 { margin:0 0 15px 0; color:#fff; font-size:1.5rem; }
-.article .text { color:#cbd5e1; line-height:1.8; font-size:1rem; }
-.sidebar { width:250px; flex-shrink:0; position:sticky; top:120px; height:fit-content; }
-.search-box { background:#111;padding:15px;margin-bottom:15px;border:2px solid #222; }
-.search-box h3 { margin:0 0 15px 0;color:#fff;font-size:1.1rem;text-align:center; }
-.search-input { width:100%;padding:10px;border:2px solid #333;background:#000;color:#e5e7eb;font-family:'Vazirmatn',sans-serif;font-size:0.95rem; }
-.search-input:focus { outline:none;border-color:#fff; }
-.eitaa-box { background:#111;padding:15px;border:2px solid #222;text-align:center; }
-.eitaa-box h3 { margin:0 0 15px 0;color:#fff;font-size:1.1rem; }
-.eitaa-link { display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px;background:#ef4444;color:#000;text-decoration:none;font-weight:bold;font-size:1rem;transition:all 0.3s; }
-.eitaa-link:hover { background:#dc2626; }
-.eitaa-link i { font-size:1.3rem; }
-.modal { display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.98);z-index:1000;overflow-y:auto; }
-.modal.active { display:block; }
-.modal-content { max-width:1000px;margin:0 auto;padding:60px 20px 40px; }
-.modal-close { position:fixed;top:20px;left:20px;background:#ef4444;color:#000;border:none;width:50px;height:50px;font-size:1.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s; z-index:1001; }
-.modal-close:hover { background:#dc2626; transform:rotate(90deg); }
-.modal-article { background:#111;border:3px solid #ef4444;padding:30px; }
-.modal-article img,.modal-article video { width:100%;height:auto;max-height:700px;object-fit:contain;display:block;margin-bottom:30px;background:#000; }
-.modal-article h1 { color:#fff;font-size:2.5rem;margin:0 0 30px 0;border-bottom:2px solid #ef4444;padding-bottom:20px; }
-.modal-article .full-text { color:#cbd5e1;line-height:2;font-size:1.2rem;white-space:pre-wrap; }
-.error { color:#ef4444;text-align:center;font-size:1.2rem;padding:40px; }
-.loading { text-align:center;color:#fff;font-size:1.2rem;padding:40px; }
-.no-results { text-align:center;color:#888;padding:40px;font-size:1.2rem; }
+body {
+  background: #000000;
+  color: #e5e7eb;
+  font-family: 'Vazirmatn', sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
-@media (min-width: 769px) { .pinned-section { display:block; } .sidebar { display:block; } }
-@media (max-width: 768px){
-.title-word-1,.title-word-2,.title-word-3{font-size:1.8rem;}
-.modal-article h1{font-size:1.8rem;}
-.modal-article .full-text{font-size:1rem;}
-.pinned-section{display:block;width:100%;position:static;max-height:none;margin-bottom:20px;}
-.pinned-wrapper{display:flex;gap:10px;overflow-x:auto;scroll-behavior:smooth;padding:5px;-webkit-overflow-scrolling:touch;}
-.pinned-wrapper::-webkit-scrollbar{height:4px;}
-.pinned-wrapper::-webkit-scrollbar-track{background:#111;border-radius:2px;}
-.pinned-wrapper::-webkit-scrollbar-thumb{background:#ef4444;border-radius:2px;}
-.pinned-news{flex:0 0 auto;width:280px;min-width:280px;margin-bottom:0;border-radius:8px;}
-.pinned-news video,.pinned-news img{max-height:150px;}
-.pinned-news .content{padding:10px;}
-.pinned-news h3{font-size:0.95rem;margin-bottom:5px;}
-.pinned-news p{font-size:0.8rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.nav-menu{width:100%;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:10px;position:static;background:#000;padding:15px 0;margin-bottom:10px;}
-.nav-item{white-space:nowrap;margin-bottom:0;padding:12px 20px;font-size:0.9rem;width:auto;min-width:100px;}
-.sidebar{display:none;}
-.container{flex-direction:column;}
-.main-news{order:3;}
+/* Critical CSS - inline for faster first paint */
+.header {
+  background: #111111;
+  padding: 15px 20px;
+  border-bottom: 3px solid #ef4444;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.title-wrapper { display: flex; gap: 15px; justify-content: center; align-items: center; }
+.title-word-1 { color: #239f40; font-size: 2.5rem; font-weight: 900; margin: 0; }
+.title-word-2 { color: #ffffff; font-size: 2.5rem; font-weight: 900; margin: 0; }
+.title-word-3 { color: #da0000; font-size: 2.5rem; font-weight: 900; margin: 0; }
+.container {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 20px;
+}
+.nav-menu {
+  width: 200px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 120px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.nav-item {
+  background: #111111;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  border: 2px solid #222;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  text-align: center;
+}
+.nav-item:hover { background: #1a1a1a; border-color: #ef4444; }
+.nav-item.active { background: #1a1a1a; border-color: #ef4444; }
+.nav-item i { color: #ef4444; }
+.pinned-section {
+  width: 350px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 120px;
+  height: fit-content;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+}
+.pinned-title {
+  background: #111111;
+  padding: 15px;
+  border: 2px solid #ef4444;
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #ef4444;
+}
+.pinned-news {
+  background: #111111;
+  border: 2px solid #333;
+  overflow: hidden;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.pinned-news:hover { border-color: #ef4444; }
+.pinned-news video,
+.pinned-news img {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: contain;
+  display: block;
+  background: #000;
+}
+.pinned-news .content { padding: 15px; }
+.pinned-news h3 { margin: 0 0 10px 0; color: #ffffff; font-size: 1.1rem; }
+.pinned-news p { margin: 0; color: #cbd5e1; line-height: 1.6; font-size: 0.9rem; }
+.main-news { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+.article {
+  background: #111111;
+  border: 2px solid #222;
+  cursor: pointer;
+  transition: all 0.3s;
+  overflow: hidden;
+}
+.article:hover { border-color: #ef4444; transform: translateY(-2px); }
+.article.hidden { display: none; }
+.article img,
+.article video {
+  width: 100%;
+  height: auto;
+  max-height: 600px;
+  object-fit: contain;
+  display: block;
+  background: #000;
+}
+.article .content { padding: 20px; }
+.article h2 { margin: 0 0 15px 0; color: #ffffff; font-size: 1.5rem; }
+.article .text { color: #cbd5e1; line-height: 1.8; font-size: 1rem; }
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 120px;
+  height: fit-content;
+}
+.search-box {
+  background: #111111;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 2px solid #222;
+}
+.search-box h3 { margin: 0 0 15px 0; color: #ffffff; font-size: 1.1rem; text-align: center; }
+.search-input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #333;
+  background: #000;
+  color: #e5e7eb;
+  font-family: 'Vazirmatn', sans-serif;
+  font-size: 0.95rem;
+}
+.search-input:focus { outline: none; border-color: #ffffff; }
+.eitaa-box {
+  background: #111111;
+  padding: 15px;
+  border: 2px solid #222;
+  text-align: center;
+}
+.eitaa-box h3 { margin: 0 0 15px 0; color: #ffffff; font-size: 1.1rem; }
+.eitaa-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  background: #ef4444;
+  color: #000;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+.eitaa-link:hover { background: #dc2626; }
+.eitaa-link i { font-size: 1.3rem; }
+
+/* Loading Skeleton - shows while content loads */
+.skeleton {
+  background: linear-gradient(90deg, #111 25%, #1a1a1a 50%, #111 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 8px;
+}
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton-img {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 15px;
+}
+.skeleton-title {
+  height: 24px;
+  width: 80%;
+  margin-bottom: 10px;
+}
+.skeleton-text {
+  height: 16px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+.skeleton-text:last-child { width: 60%; }
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.98);
+  z-index: 1000;
+  overflow-y: auto;
+}
+.modal.active { display: block; }
+.modal-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 60px 20px 40px;
+}
+.modal-close {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: #ef4444;
+  color: #000;
+  border: none;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  z-index: 1001;
+}
+.modal-close:hover { background: #dc2626; transform: rotate(90deg); }
+.modal-article {
+  background: #111111;
+  border: 3px solid #ef4444;
+  padding: 30px;
+}
+.modal-article img,
+.modal-article video {
+  width: 100%;
+  height: auto;
+  max-height: 700px;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 30px;
+  background: #000;
+}
+.modal-article h1 {
+  color: #ffffff;
+  font-size: 2.5rem;
+  margin: 0 0 30px 0;
+  border-bottom: 2px solid #ef4444;
+  padding-bottom: 20px;
+}
+.modal-article .full-text {
+  color: #cbd5e1;
+  line-height: 2;
+  font-size: 1.2rem;
+  white-space: pre-wrap;
+}
+.error { color: #ef4444; text-align: center; font-size: 1.2rem; padding: 40px; }
+.loading { text-align: center; color: #ffffff; font-size: 1.2rem; padding: 40px; }
+.no-results { text-align: center; color: #888; padding: 40px; font-size: 1.2rem; }
+
+/* Infinite scroll loader */
+.infinite-loader {
+  text-align: center;
+  padding: 30px;
+  color: #94a3b8;
+}
+.infinite-loader.hidden { display: none; }
+
+/* Offline indicator */
+.offline-banner {
+  background: #f59e0b;
+  color: #000;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  display: none;
+}
+.offline-banner.show { display: block; }
+
+@media (min-width: 769px) {
+  .pinned-section { display: block; }
+  .sidebar { display: block; }
+}
+
+@media (max-width: 768px) {
+  .title-word-1, .title-word-2, .title-word-3 { font-size: 1.8rem; }
+  .modal-article h1 { font-size: 1.8rem; }
+  .modal-article .full-text { font-size: 1rem; }
+  
+  .pinned-section {
+    display: block;
+    width: 100%;
+    position: static;
+    max-height: none;
+    margin-bottom: 20px;
+  }
+  
+  .pinned-wrapper {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 5px;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .pinned-wrapper::-webkit-scrollbar { height: 4px; }
+  .pinned-wrapper::-webkit-scrollbar-track { background: #111; border-radius: 2px; }
+  .pinned-wrapper::-webkit-scrollbar-thumb { background: #ef4444; border-radius: 2px; }
+  
+  .pinned-news {
+    flex: 0 0 auto;
+    width: 280px;
+    min-width: 280px;
+    margin-bottom: 0;
+    border-radius: 8px;
+  }
+  
+  .pinned-news video, .pinned-news img { max-height: 150px; }
+  .pinned-news .content { padding: 10px; }
+  .pinned-news h3 { font-size: 0.95rem; margin-bottom: 5px; }
+  .pinned-news p {
+    font-size: 0.8rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .nav-menu {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    position: static;
+    background: #000;
+    padding: 15px 0;
+    margin-bottom: 10px;
+  }
+  
+  .nav-item {
+    white-space: nowrap;
+    margin-bottom: 0;
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    width: auto;
+    min-width: 100px;
+  }
+  
+  .sidebar { display: none; }
+  .container { flex-direction: column; }
+  .main-news { order: 3; }
 }
 </style>
 </head>
 <body>
+
+<!-- Offline Banner -->
+<div class="offline-banner" id="offlineBanner">
+  ⚠️ شما آفلاین هستید - نمایش محتوای کش شده
+</div>
 
 <div class="header">
   <div class="header-content">
@@ -104,12 +408,46 @@ body { background:#000;color:#e5e7eb;font-family:'Vazirmatn',sans-serif;margin:0
   </nav>
   
   <aside class="pinned-section">
-    <div class="pinned-title"><i class="fas fa-thumbtack"></i> اخبار ویژه</div>
-    <div class="pinned-wrapper" id="pinnedNews"><p class="loading">در حال بارگذاری...</p></div>
+    <div class="pinned-title">
+      <i class="fas fa-thumbtack"></i> اخبار ویژه
+    </div>
+    <div class="pinned-wrapper" id="pinnedNews">
+      <!-- Skeleton loaders while pinned news loads -->
+      <div class="pinned-news skeleton">
+        <div class="skeleton-img"></div>
+        <div class="content">
+          <div class="skeleton-title"></div>
+          <div class="skeleton-text"></div>
+        </div>
+      </div>
+    </div>
   </aside>
   
   <main class="main-news">
-    <div id="news"><p class="loading">در حال بارگذاری اخبار...</p></div>
+    <div id="news">
+      <!-- Initial skeleton loaders -->
+      <div class="article skeleton">
+        <div class="skeleton-img"></div>
+        <div class="content">
+          <div class="skeleton-title"></div>
+          <div class="skeleton-text"></div>
+          <div class="skeleton-text"></div>
+        </div>
+      </div>
+      <div class="article skeleton">
+        <div class="skeleton-img"></div>
+        <div class="content">
+          <div class="skeleton-title"></div>
+          <div class="skeleton-text"></div>
+          <div class="skeleton-text"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Infinite scroll loader -->
+    <div class="infinite-loader hidden" id="infiniteLoader">
+      <i class="fas fa-spinner fa-spin"></i> در حال بارگذاری بیشتر...
+    </div>
   </main>
   
   <aside class="sidebar">
@@ -117,94 +455,630 @@ body { background:#000;color:#e5e7eb;font-family:'Vazirmatn',sans-serif;margin:0
       <h3><i class="fas fa-search"></i> جستجو</h3>
       <input type="text" class="search-input" id="searchInput" placeholder="عنوان خبر را جستجو کنید...">
     </div>
+    
     <div class="eitaa-box">
       <h3><i class="fas fa-paper-plane"></i> کانال ایتا</h3>
       <a href="https://eitaa.com/valiasrfoari" class="eitaa-link" target="_blank">
-        <i class="fas fa-external-link-alt"></i><span>عضویت در کانال</span>
+        <i class="fas fa-external-link-alt"></i>
+        <span>عضویت در کانال</span>
       </a>
     </div>
   </aside>
 </div>
 
 <div id="articleModal" class="modal">
-  <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+  <button class="modal-close" onclick="closeModal()">
+    <i class="fas fa-times"></i>
+  </button>
   <div class="modal-content">
-    <div id="modalArticleContent" class="modal-article"></div>
+    <div id="modalArticleContent" class="modal-article">
+      <p class="loading">در حال بارگذاری...</p>
+    </div>
   </div>
 </div>
 
 <script>
-// --- JS بهینه و Lazy Load ---
-const newsContainer=document.getElementById("news"),
-      pinnedNewsContainer=document.getElementById("pinnedNews"),
-      searchInput=document.getElementById("searchInput"),
-      modal=document.getElementById("articleModal"),
-      modalContent=document.getElementById("modalArticleContent"),
-      homeBtn=document.getElementById("homeBtn"),
-      videoBtn=document.getElementById("videoBtn"),
-      imageBtn=document.getElementById("imageBtn"),
-      navItems=document.querySelectorAll(".nav-item");
+// ===== PERFORMANCE OPTIMIZATIONS FOR SLOW INTERNET =====
 
-let allArticles=[], fullArticlesData=[], currentFilter="all";
+// Configuration
+const CONFIG = {
+  API_BASE: 'articles/',
+  INITIAL_LOAD_COUNT: 5,      // Load only 5 articles initially
+  PAGE_SIZE: 5,               // Load 5 more on scroll
+  DEBOUNCE_DELAY: 300,        // Debounce search input (ms)
+  RETRY_ATTEMPTS: 3,          // Retry failed requests
+  RETRY_DELAY: 1000,          // Wait 1s between retries
+  CACHE_DURATION: 5 * 60 * 1000 // Cache API responses for 5 minutes
+};
 
-// Nav buttons
-homeBtn.addEventListener("click",()=>filterNav("all",homeBtn));
-videoBtn.addEventListener("click",()=>filterNav("video",videoBtn));
-imageBtn.addEventListener("click",()=>filterNav("image",imageBtn));
+// DOM References (cached for performance)
+const newsContainer = document.getElementById("news");
+const pinnedNewsContainer = document.getElementById("pinnedNews");
+const searchInput = document.getElementById("searchInput");
+const modal = document.getElementById("articleModal");
+const modalContent = document.getElementById("modalArticleContent");
+const homeBtn = document.getElementById("homeBtn");
+const videoBtn = document.getElementById("videoBtn");
+const imageBtn = document.getElementById("imageBtn");
+const navItems = document.querySelectorAll('.nav-item');
+const infiniteLoader = document.getElementById("infiniteLoader");
+const offlineBanner = document.getElementById("offlineBanner");
 
-function filterNav(type,btn){
-  currentFilter=type;
-  navItems.forEach(i=>i.classList.remove("active"));
-  btn.classList.add("active");
-  filterByType(type);
-  window.scrollTo({top:0,behavior:"smooth"});
+// State
+let allArticles = [];
+let fullArticlesData = [];
+let currentFilter = 'all';
+let currentPage = 0;
+let isLoading = false;
+let hasMore = true;
+let searchTimeout = null;
+let cachedIndex = null;
+let cacheTimestamp = 0;
+
+// ===== NETWORK UTILITIES =====
+
+// Check if online
+function isOnline() {
+  return navigator.onLine;
 }
 
-// Lazy load observer
-const lazyObserver=new IntersectionObserver(entries=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      const el=entry.target;
-      el.src=el.dataset.src;
-      lazyObserver.unobserve(el);
+// Fetch with retry logic
+async function fetchWithRetry(url, options = {}, attempts = 0) {
+  try {
+    const response = await fetch(url, {
+      ...options,
+      cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    if (attempts < CONFIG.RETRY_ATTEMPTS && isOnline()) {
+      await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY * (attempts + 1)));
+      return fetchWithRetry(url, options, attempts + 1);
+    }
+    throw error;
+  }
+}
+
+// Cache utility
+function getCachedData(key) {
+  try {
+    const cached = localStorage.getItem(`cache_${key}`);
+    if (!cached) return null;
+    
+    const { data, timestamp } = JSON.parse(cached);
+    if (Date.now() - timestamp < CONFIG.CACHE_DURATION) {
+      return data;
+    }
+  } catch (e) {
+    // Cache invalid, ignore
+  }
+  return null;
+}
+
+function setCachedData(key, data) {
+  try {
+    localStorage.setItem(`cache_${key}`, JSON.stringify({
+      data,
+      timestamp: Date.now()
+    }));
+  } catch (e) {
+    // Storage full, ignore
+  }
+}
+
+// ===== LAZY LOADING =====
+
+// Intersection Observer for lazy loading images
+const imageObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const img = entry.target;
+      if (img.dataset.src) {
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+        img.classList.remove('skeleton');
+        imageObserver.unobserve(img);
+      }
     }
   });
-},{rootMargin:"200px 0px"});
+}, { rootMargin: '100px' }); // Start loading 100px before visible
 
-// Fetch helper
-async function fetchText(url){
-  const res=await fetch(url,{cache:"no-store"});
-  if(!res.ok) throw new Error("خطا در بارگذاری "+url);
-  return await res.text();
+// ===== UI UTILITIES =====
+
+// Debounce function for search
+function debounce(func, delay) {
+  return function(...args) {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => func.apply(this, args), delay);
+  };
 }
 
-// Load news
-async function loadNews(){
-  try{
-    const ts=Date.now();
-    const res=await fetch(`articles/index.json?t=${ts}`,{cache:"no-store"});
-    if(!res.ok) throw new Error(`خطا: ${res.status}`);
-    const data=await res.json();
-    let articlesList=[], pinnedList=[];
-    if(Array.isArray(data)){ articlesList=data; pinnedList=data.slice(0,1); }
-    else{ pinnedList=data.pinned||[]; articlesList=data.articles||[]; }
-
-    newsContainer.innerHTML=""; pinnedNewsContainer.innerHTML="";
-    allArticles=[]; fullArticlesData=[];
-
-    await Promise.allSettled(pinnedList.map(f=>loadPinned(f)));
-    const frag=document.createDocumentFragment();
-    const articlesLoaded=await Promise.allSettled(articlesList.map(f=>loadArticle(f)));
-    articlesLoaded.forEach(a=>{ if(a.status==="fulfilled"&&a.value) frag.appendChild(a.value); });
-    newsContainer.appendChild(frag);
-    document.querySelectorAll(".lazy").forEach(el=>lazyObserver.observe(el));
-
-  }catch(err){ console.error(err); newsContainer.innerHTML=`<p class='error'>${err.message}</p>`;}
+// Create skeleton loader for article
+function createSkeleton() {
+  const skeleton = document.createElement('div');
+  skeleton.className = 'article skeleton';
+  skeleton.innerHTML = `
+    <div class="skeleton-img"></div>
+    <div class="content">
+      <div class="skeleton-title"></div>
+      <div class="skeleton-text"></div>
+      <div class="skeleton-text"></div>
+    </div>
+  `;
+  return skeleton;
 }
 
-// ... ادامه دارد: loadPinned, loadArticle, filterByType, openModal, closeModal, search
+// Remove skeletons from container
+function removeSkeletons(container) {
+  const skeletons = container.querySelectorAll('.skeleton');
+  skeletons.forEach(s => s.remove());
+}
 
-loadNews();
+// ===== MAIN FUNCTIONS =====
+
+// Navigation handlers
+homeBtn.addEventListener('click', () => {
+  currentFilter = 'all';
+  navItems.forEach(item => item.classList.remove('active'));
+  homeBtn.classList.add('active');
+  resetAndLoad();
+});
+
+videoBtn.addEventListener('click', () => {
+  currentFilter = 'video';
+  navItems.forEach(item => item.classList.remove('active'));
+  videoBtn.classList.add('active');
+  resetAndLoad();
+});
+
+imageBtn.addEventListener('click', () => {
+  currentFilter = 'image';
+  navItems.forEach(item => item.classList.remove('active'));
+  imageBtn.classList.add('active');
+  resetAndLoad();
+});
+
+function resetAndLoad() {
+  removeSkeletons(newsContainer);
+  newsContainer.innerHTML = '';
+  allArticles = [];
+  currentPage = 0;
+  hasMore = true;
+  isLoading = false;
+  loadNextPage();
+}
+
+// Load index.json with caching
+async function loadIndex() {
+  // Check cache first
+  const cached = getCachedData('index');
+  if (cached) {
+    return cached;
+  }
+  
+  // Fetch with retry
+  const timestamp = Date.now();
+  const data = await fetchWithRetry(`${CONFIG.API_BASE}index.json?t=${timestamp}`);
+  
+  // Cache the result
+  setCachedData('index', data);
+  
+  return data;
+}
+
+// Load news from JSON files
+async function loadNews() {
+  try {
+    // Update offline status
+    updateOfflineStatus();
+    
+    const data = await loadIndex();
+    let articlesList, pinnedList;
+    
+    if (Array.isArray(data)) {
+      articlesList = data;
+      pinnedList = data.slice(0, 1);
+    } else if (data.pinned && data.articles) {
+      pinnedList = data.pinned.map(p => typeof p === 'string' ? p : p.folder);
+      articlesList = data.articles.map(a => typeof a === 'string' ? a : a.folder);
+    } else {
+      throw new Error('فرمت JSON نامعتبر');
+    }
+    
+    // Clear initial skeletons
+    removeSkeletons(pinnedNewsContainer);
+    removeSkeletons(newsContainer);
+    
+    // Load pinned news (limit to 3 for performance)
+    const pinnedToLoad = pinnedList.slice(0, 3);
+    for (let folder of pinnedToLoad) {
+      await loadPinnedNews(folder);
+    }
+    
+    // Store articles for pagination
+    allArticles = articlesList.map(folder => ({
+      folder,
+      title: '',
+      type: 'img',
+      content: '',
+      loaded: false
+    }));
+    
+    // Load first page
+    await loadNextPage();
+    
+    // Setup infinite scroll
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Setup offline listener
+    window.addEventListener('online', updateOfflineStatus);
+    window.addEventListener('offline', updateOfflineStatus);
+    
+  } catch (error) {
+    console.error('Error loading news:', error);
+    removeSkeletons(newsContainer);
+    newsContainer.innerHTML = `<p class='error'>
+      ${isOnline() ? 'خطا در بارگذاری اخبار' : 'آفلاین هستید - لطفاً اتصال اینترنت را بررسی کنید'}
+    </p>`;
+  }
+}
+
+// Update offline banner
+function updateOfflineStatus() {
+  if (!isOnline()) {
+    offlineBanner.classList.add('show');
+  } else {
+    offlineBanner.classList.remove('show');
+  }
+}
+
+// Load pinned news item
+async function loadPinnedNews(folder) {
+  try {
+    // Check if we have cached content
+    const cached = getCachedData(`article_${folder}`);
+    
+    let titleText, contentText, mediaType;
+    
+    if (cached) {
+      titleText = cached.title;
+      contentText = cached.content;
+      mediaType = cached.type;
+    } else {
+      const fullText = await fetchWithRetry(`${CONFIG.API_BASE}${folder}/text.txt`);
+      const lines = fullText.split('\n');
+      titleText = lines[0].trim();
+      contentText = lines.slice(1).join('\n').trim();
+      mediaType = 'img'; // Default, could be enhanced with JSON metadata
+      
+      // Cache the article
+      setCachedData(`article_${folder}`, {
+        title: titleText,
+        content: contentText,
+        type: mediaType
+      });
+    }
+    
+    const pinnedContainer = document.createElement('div');
+    pinnedContainer.className = 'pinned-news';
+    pinnedContainer.onclick = () => openModal(folder, titleText, contentText, mediaType);
+    
+    // Create lazy-loaded media element
+    const mediaElement = createLazyMedia(folder, mediaType);
+    
+    const content = document.createElement('div');
+    content.className = 'content';
+    content.innerHTML = `<h3>${titleText}</h3><p>${contentText.substring(0, 80)}...</p>`;
+    
+    pinnedContainer.append(mediaElement, content);
+    pinnedNewsContainer.appendChild(pinnedContainer);
+    
+  } catch (err) {
+    console.error(`Error loading pinned ${folder}:`, err);
+  }
+}
+
+// Create lazy-loaded media element
+function createLazyMedia(folder, type) {
+  if (type === 'video') {
+    // Never preload videos - only load when modal opens
+    const placeholder = document.createElement('div');
+    placeholder.className = 'skeleton skeleton-img';
+    placeholder.dataset.folder = folder;
+    placeholder.dataset.type = 'video';
+    placeholder.onclick = (e) => {
+      e.stopPropagation();
+      openModal(folder, '', '', 'video');
+    };
+    placeholder.innerHTML = '<i class="fas fa-play-circle" style="font-size:3rem;color:#22c55e"></i>';
+    return placeholder;
+  } else {
+    const img = document.createElement('img');
+    img.className = 'skeleton';
+    img.dataset.src = `${CONFIG.API_BASE}${folder}/cover.jpg`;
+    img.alt = '';
+    img.loading = 'lazy';
+    img.onerror = () => { 
+      img.style.display = 'none';
+      img.closest('.pinned-news')?.querySelector('h3')?.style.setProperty('--fallback', '1');
+    };
+    imageObserver.observe(img);
+    return img;
+  }
+}
+
+// Load next page of articles (infinite scroll)
+async function loadNextPage() {
+  if (isLoading || !hasMore) return;
+  
+  isLoading = true;
+  infiniteLoader.classList.remove('hidden');
+  
+  const start = currentPage * CONFIG.PAGE_SIZE;
+  const end = start + CONFIG.PAGE_SIZE;
+  const pageArticles = allArticles.slice(start, end);
+  
+  if (pageArticles.length === 0) {
+    hasMore = false;
+    infiniteLoader.classList.add('hidden');
+    isLoading = false;
+    return;
+  }
+  
+  // Load articles one by one to avoid overwhelming slow connections
+  for (let articleData of pageArticles) {
+    try {
+      const folder = articleData.folder;
+      
+      // Skip if already loaded
+      if (articleData.loaded) continue;
+      
+      // Check cache first
+      const cached = getCachedData(`article_${folder}`);
+      
+      let titleText, contentText, mediaType;
+      
+      if (cached) {
+        titleText = cached.title;
+        contentText = cached.content;
+        mediaType = cached.type;
+      } else {
+        const fullText = await fetchWithRetry(`${CONFIG.API_BASE}${folder}/text.txt`);
+        const lines = fullText.split('\n');
+        titleText = lines[0].trim();
+        contentText = lines.slice(1).join('\n').trim();
+        mediaType = 'img';
+        
+        // Cache the article
+        setCachedData(`article_${folder}`, {
+          title: titleText,
+          content: contentText,
+          type: mediaType
+        });
+      }
+      
+      // Update article data
+      articleData.title = titleText.toLowerCase();
+      articleData.type = mediaType;
+      articleData.content = contentText;
+      articleData.loaded = true;
+      
+      // Create article element
+      const container = document.createElement("div");
+      container.className = "article";
+      
+      // Apply filter
+      if (currentFilter !== 'all') {
+        if ((currentFilter === 'video' && mediaType !== 'video') ||
+            (currentFilter === 'image' && mediaType !== 'img')) {
+          container.classList.add('hidden');
+        }
+      }
+      
+      container.dataset.title = titleText.toLowerCase();
+      container.dataset.type = mediaType;
+      container.onclick = () => openModal(folder, titleText, contentText, mediaType);
+      
+      // Lazy-loaded media
+      const mediaElement = createLazyMedia(folder, mediaType);
+      
+      const contentDiv = document.createElement("div");
+      contentDiv.className = "content";
+      
+      const title = document.createElement("h2");
+      title.textContent = titleText;
+      
+      const text = document.createElement("div");
+      text.className = "text";
+      text.textContent = contentText.substring(0, 150) + '...';
+      
+      contentDiv.append(title, text);
+      container.append(mediaElement, contentDiv);
+      newsContainer.appendChild(container);
+      
+    } catch (err) {
+      console.error(`Error loading article ${articleData.folder}:`, err);
+    }
+  }
+  
+  currentPage++;
+  isLoading = false;
+  infiniteLoader.classList.add('hidden');
+  
+  if (currentPage * CONFIG.PAGE_SIZE >= allArticles.length) {
+    hasMore = false;
+  }
+}
+
+// Handle scroll for infinite loading
+function handleScroll() {
+  if (!hasMore || isLoading) return;
+  
+  const scrollPosition = window.innerHeight + window.scrollY;
+  const threshold = document.body.offsetHeight - 300;
+  
+  if (scrollPosition >= threshold) {
+    loadNextPage();
+  }
+}
+
+// Filter articles by type
+function filterByType(type) {
+  currentFilter = type;
+  let visibleCount = 0;
+  
+  const articles = document.querySelectorAll('.article');
+  articles.forEach(article => {
+    const articleType = article.dataset.type;
+    if (type === 'all') {
+      article.classList.remove('hidden');
+      visibleCount++;
+    } else if (type === 'video' && articleType === 'video') {
+      article.classList.remove('hidden');
+      visibleCount++;
+    } else if (type === 'image' && articleType === 'img') {
+      article.classList.remove('hidden');
+      visibleCount++;
+    } else {
+      article.classList.add('hidden');
+    }
+  });
+  
+  // Show/hide no results message
+  const existingNoResults = document.querySelector('.no-results');
+  if (existingNoResults) existingNoResults.remove();
+  
+  if (visibleCount === 0 && type !== 'all') {
+    const noResults = document.createElement('p');
+    noResults.className = 'no-results';
+    noResults.textContent = type === 'video' ? 'هیچ ویدیویی یافت نشد.' : 'هیچ تصویری یافت نشد.';
+    newsContainer.appendChild(noResults);
+  }
+}
+
+// Open article modal (lazy-load full content)
+async function openModal(folder, title, content, type) {
+  modalContent.innerHTML = '<p class="loading">در حال بارگذاری...</p>';
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  
+  try {
+    // If content not passed, fetch it (for pinned news placeholders)
+    if (!content) {
+      const cached = getCachedData(`article_${folder}`);
+      if (cached) {
+        content = cached.content;
+        title = title || cached.title;
+      } else {
+        const fullText = await fetchWithRetry(`${CONFIG.API_BASE}${folder}/text.txt`);
+        const lines = fullText.split('\n');
+        title = title || lines[0].trim();
+        content = lines.slice(1).join('\n').trim();
+        
+        setCachedData(`article_${folder}`, {
+          title,
+          content,
+          type
+        });
+      }
+    }
+    
+    // Load media only when modal opens (critical for slow internet)
+    let mediaHTML = '';
+    if (type === 'video') {
+      // Only load video when user actually opens modal
+      mediaHTML = `<video controls src="${CONFIG.API_BASE}${folder}/cover.mp4" style="width:100%;max-height:700px;display:block;margin-bottom:30px;background:#000"></video>`;
+    } else {
+      // Load full-quality image for modal view
+      mediaHTML = `<img src="${CONFIG.API_BASE}${folder}/cover.jpg" alt="${title}" style="width:100%;max-height:700px;display:block;margin-bottom:30px;background:#000">`;
+    }
+    
+    modalContent.innerHTML = `
+      ${mediaHTML}
+      <h1>${title}</h1>
+      <div class="full-text">${content}</div>
+    `;
+  } catch (err) {
+    modalContent.innerHTML = `<p class="error">خطا در بارگذاری خبر</p>`;
+  }
+}
+
+// Close modal
+function closeModal() {
+  modal.classList.remove('active');
+  document.body.style.overflow = 'auto';
+  
+  // Stop any playing videos
+  const video = modalContent.querySelector('video');
+  if (video) {
+    video.pause();
+    video.src = '';
+  }
+}
+
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) closeModal();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+});
+
+// Debounced search
+const debouncedSearch = debounce(() => {
+  const searchTerm = searchInput.value.toLowerCase().trim();
+  
+  let visibleCount = 0;
+  const articles = document.querySelectorAll('.article');
+  
+  articles.forEach(article => {
+    const articleTitle = article.dataset.title || '';
+    if (searchTerm === '' || articleTitle.includes(searchTerm)) {
+      article.classList.remove('hidden');
+      visibleCount++;
+    } else {
+      article.classList.add('hidden');
+    }
+  });
+  
+  // Show/hide no results
+  const existingNoResults = document.querySelector('.no-results');
+  if (existingNoResults) existingNoResults.remove();
+  
+  if (visibleCount === 0 && searchTerm !== '') {
+    const noResults = document.createElement('p');
+    noResults.className = 'no-results';
+    noResults.textContent = 'هیچ خبری با این عنوان یافت نشد.';
+    newsContainer.appendChild(noResults);
+  }
+}, CONFIG.DEBOUNCE_DELAY);
+
+searchInput.addEventListener('input', debouncedSearch);
+
+// ===== INITIALIZATION =====
+
+// Start loading when page is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNews);
+} else {
+  loadNews();
+}
+
+// Preload critical assets only
+if ('connection' in navigator) {
+  // If on slow connection, reduce initial load
+  if (navigator.connection.saveData || 
+      navigator.connection.effectiveType === '2g' || 
+      navigator.connection.effectiveType === 'slow-2g') {
+    CONFIG.INITIAL_LOAD_COUNT = 3;
+    CONFIG.PAGE_SIZE = 3;
+  }
+}
 </script>
 
 </body>
