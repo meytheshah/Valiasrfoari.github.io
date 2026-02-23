@@ -1,212 +1,210 @@
-<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>اخبار صحن ولیعصر</title>
-
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<link rel="icon" type="image/png" href="logo.png">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#000;color:#e5e7eb;font-family:Vazirmatn}
+* { box-sizing: border-box; }
+body { background:#000;color:#e5e7eb;font-family:'Vazirmatn',sans-serif;margin:0;padding:0; }
+.header { background:#111;padding:15px 20px;border-bottom:3px solid #ef4444;position:sticky;top:0;z-index:100; }
+.header-content { max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:20px; }
+.title-wrapper { display:flex; gap:15px; justify-content:center; align-items:center; }
+.title-word-1 { color:#239f40;font-size:2.5rem;font-weight:900;margin:0; }
+.title-word-2 { color:#fff;font-size:2.5rem;font-weight:900;margin:0; }
+.title-word-3 { color:#da0000;font-size:2.5rem;font-weight:900;margin:0; }
+.container { display:flex; max-width:1400px; margin:0 auto; padding:20px; gap:20px; }
+.nav-menu { width:200px; flex-shrink:0; position:sticky; top:120px; height:fit-content; display:flex; flex-direction:column; align-items:center; }
+.nav-item { background:#111; padding:15px 20px; margin-bottom:10px; border:2px solid #222; cursor:pointer; transition:all 0.3s; display:flex; align-items:center; justify-content:center; gap:10px; width:100%; text-align:center; }
+.nav-item:hover { background:#1a1a1a;border-color:#ef4444; }
+.nav-item.active { background:#1a1a1a;border-color:#ef4444; }
+.nav-item i { color:#ef4444; }
+.pinned-section { width:350px; flex-shrink:0; position:sticky; top:120px; height:fit-content; max-height:calc(100vh - 140px); overflow-y:auto; }
+.pinned-title { background:#111; padding:15px; border:2px solid #ef4444; margin-bottom:15px; text-align:center; font-size:1.3rem; font-weight:bold; color:#ef4444; }
+.pinned-news { background:#111;border:2px solid #333;overflow:hidden;margin-bottom:15px;cursor:pointer;transition:all 0.3s; }
+.pinned-news:hover { border-color:#ef4444; }
+.pinned-news video,.pinned-news img { width:100%; height:auto; max-height:300px; object-fit:contain; display:block; background:#000; }
+.pinned-news .content { padding:15px; }
+.pinned-news h3 { margin:0 0 10px 0; color:#fff; font-size:1.1rem; }
+.pinned-news p { margin:0; color:#cbd5e1; line-height:1.6; font-size:0.9rem; }
+.main-news { flex:1; display:flex; flex-direction:column; gap:20px; }
+.article { background:#111;border:2px solid #222;cursor:pointer;transition:all 0.3s;overflow:hidden; }
+.article:hover { border-color:#ef4444; transform:translateY(-2px); }
+.article.hidden { display:none; }
+.article img,.article video { width:100%; height:auto; max-height:600px; object-fit:contain; display:block; background:#000; }
+.article .content { padding:20px; }
+.article h2 { margin:0 0 15px 0; color:#fff; font-size:1.5rem; }
+.article .text { color:#cbd5e1; line-height:1.8; font-size:1rem; }
+.sidebar { width:250px; flex-shrink:0; position:sticky; top:120px; height:fit-content; }
+.search-box { background:#111;padding:15px;margin-bottom:15px;border:2px solid #222; }
+.search-box h3 { margin:0 0 15px 0;color:#fff;font-size:1.1rem;text-align:center; }
+.search-input { width:100%;padding:10px;border:2px solid #333;background:#000;color:#e5e7eb;font-family:'Vazirmatn',sans-serif;font-size:0.95rem; }
+.search-input:focus { outline:none;border-color:#fff; }
+.eitaa-box { background:#111;padding:15px;border:2px solid #222;text-align:center; }
+.eitaa-box h3 { margin:0 0 15px 0;color:#fff;font-size:1.1rem; }
+.eitaa-link { display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px;background:#ef4444;color:#000;text-decoration:none;font-weight:bold;font-size:1rem;transition:all 0.3s; }
+.eitaa-link:hover { background:#dc2626; }
+.eitaa-link i { font-size:1.3rem; }
+.modal { display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.98);z-index:1000;overflow-y:auto; }
+.modal.active { display:block; }
+.modal-content { max-width:1000px;margin:0 auto;padding:60px 20px 40px; }
+.modal-close { position:fixed;top:20px;left:20px;background:#ef4444;color:#000;border:none;width:50px;height:50px;font-size:1.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s; z-index:1001; }
+.modal-close:hover { background:#dc2626; transform:rotate(90deg); }
+.modal-article { background:#111;border:3px solid #ef4444;padding:30px; }
+.modal-article img,.modal-article video { width:100%;height:auto;max-height:700px;object-fit:contain;display:block;margin-bottom:30px;background:#000; }
+.modal-article h1 { color:#fff;font-size:2.5rem;margin:0 0 30px 0;border-bottom:2px solid #ef4444;padding-bottom:20px; }
+.modal-article .full-text { color:#cbd5e1;line-height:2;font-size:1.2rem;white-space:pre-wrap; }
+.error { color:#ef4444;text-align:center;font-size:1.2rem;padding:40px; }
+.loading { text-align:center;color:#fff;font-size:1.2rem;padding:40px; }
+.no-results { text-align:center;color:#888;padding:40px;font-size:1.2rem; }
 
-/* ===== HEADER ===== */
-.header{
-  position:sticky;top:0;z-index:100;
-  height:90px;
-  background:#000;
-  border-bottom:3px solid #ef4444;
-  overflow:hidden;
-}
-.header::before{
-  content:"";
-  position:absolute;inset:-40%;
-  background:
-    linear-gradient(90deg,
-      rgba(0,122,61,.25) 0%,
-      rgba(255,255,255,.25) 50%,
-      rgba(218,0,0,.25) 100%);
-  transform:rotate(-12deg) scale(1.3);
-}
-.header-content{
-  position:relative;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.title-wrapper{display:flex;gap:12px}
-.title-word-1{color:#239f40;font-size:2rem;font-weight:900}
-.title-word-2{color:#fff;font-size:2rem;font-weight:900}
-.title-word-3{color:#da0000;font-size:2rem;font-weight:900}
-
-/* ===== LAYOUT ===== */
-.container{max-width:1400px;margin:auto;padding:20px;display:flex;gap:20px}
-
-/* NAV */
-.nav-menu{width:200px;display:flex;flex-direction:column;gap:10px}
-.nav-item{
-  background:#111;border:2px solid #222;padding:14px;
-  text-align:center;cursor:pointer
-}
-.nav-item.active,.nav-item:hover{border-color:#ef4444}
-
-/* PINNED */
-.pinned-section{width:340px}
-.pinned-title{
-  text-align:center;
-  color:#ef4444;
-  border:2px solid #ef4444;
-  padding:12px;
-  margin-bottom:10px
-}
-.pinned-wrapper{display:flex;flex-direction:column;gap:12px}
-.pinned-news{border:2px solid #333;background:#111;cursor:pointer}
-.pinned-news img,.pinned-news video{width:100%;background:#000}
-.pinned-news .content{padding:10px}
-
-/* MAIN */
-.main-news{flex:1;display:flex;flex-direction:column;gap:20px}
-.article{background:#111;border:2px solid #222;cursor:pointer}
-.article.hidden{display:none}
-.article img,.article video{width:100%;background:#000}
-.article .content{padding:15px}
-
-/* SIDEBAR */
-.sidebar{width:250px}
-.search-box,.eitaa-box{background:#111;border:2px solid #222;padding:15px;margin-bottom:15px}
-.eitaa-link{
-  display:block;
-  background:#ef4444;
-  color:#000;
-  padding:12px;
-  text-decoration:none;
-  font-weight:bold
-}
-
-/* MODAL */
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:999}
-.modal.active{display:block}
-.modal-content{max-width:900px;margin:auto;padding:40px}
-.modal-close{position:fixed;top:20px;left:20px;background:#ef4444;border:none;width:45px;height:45px}
-
-/* ===== MOBILE ===== */
-@media(max-width:768px){
-  .container{flex-direction:column}
-  .nav-menu{flex-direction:row;width:100%;justify-content:center}
-  .sidebar{display:block}
-  
-  /* PINNED MOBILE FIX */
-  .pinned-wrapper{
-    flex-direction:row;
-    overflow-x:auto;
-    overflow-y:hidden;
-    gap:10px;
-  }
-  .pinned-news{
-    min-width:260px;
-    flex:0 0 auto;
-  }
+@media (min-width: 769px) { .pinned-section { display:block; } .sidebar { display:block; } }
+@media (max-width: 768px){
+.title-word-1,.title-word-2,.title-word-3{font-size:1.8rem;}
+.modal-article h1{font-size:1.8rem;}
+.modal-article .full-text{font-size:1rem;}
+.pinned-section{display:block;width:100%;position:static;max-height:none;margin-bottom:20px;}
+.pinned-wrapper{display:flex;gap:10px;overflow-x:auto;scroll-behavior:smooth;padding:5px;-webkit-overflow-scrolling:touch;}
+.pinned-wrapper::-webkit-scrollbar{height:4px;}
+.pinned-wrapper::-webkit-scrollbar-track{background:#111;border-radius:2px;}
+.pinned-wrapper::-webkit-scrollbar-thumb{background:#ef4444;border-radius:2px;}
+.pinned-news{flex:0 0 auto;width:280px;min-width:280px;margin-bottom:0;border-radius:8px;}
+.pinned-news video,.pinned-news img{max-height:150px;}
+.pinned-news .content{padding:10px;}
+.pinned-news h3{font-size:0.95rem;margin-bottom:5px;}
+.pinned-news p{font-size:0.8rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.nav-menu{width:100%;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:10px;position:static;background:#000;padding:15px 0;margin-bottom:10px;}
+.nav-item{white-space:nowrap;margin-bottom:0;padding:12px 20px;font-size:0.9rem;width:auto;min-width:100px;}
+.sidebar{display:none;}
+.container{flex-direction:column;}
+.main-news{order:3;}
 }
 </style>
 </head>
-
 <body>
 
 <div class="header">
   <div class="header-content">
     <div class="title-wrapper">
-      <div class="title-word-1">اخبار</div>
-      <div class="title-word-2">صحن</div>
-      <div class="title-word-3">ولیعصر</div>
+      <h1 class="title-word-1">اخبار</h1>
+      <h1 class="title-word-2">صحن</h1>
+      <h1 class="title-word-3">ولیعصر</h1>
     </div>
   </div>
 </div>
 
 <div class="container">
-
-<nav class="nav-menu">
-  <div class="nav-item active" onclick="setFilter('all')">صفحه اصلی</div>
-  <div class="nav-item" onclick="setFilter('video')">ویدیوها</div>
-  <div class="nav-item" onclick="setFilter('image')">تصاویر</div>
-</nav>
-
-<aside class="pinned-section">
-  <div class="pinned-title">اخبار ویژه</div>
-  <div id="pinnedNews" class="pinned-wrapper"></div>
-</aside>
-
-<main class="main-news" id="news"></main>
-
-<aside class="sidebar">
-  <div class="search-box">
-    <input id="searchInput" placeholder="جستجو..." style="width:100%">
-  </div>
-  <div class="eitaa-box">
-    <a class="eitaa-link" href="https://eitaa.com/valiasrfoari" target="_blank">
-      عضویت در کانال ایتا
-    </a>
-  </div>
-</aside>
-
+  <nav class="nav-menu">
+    <div class="nav-item active" id="homeBtn"><i class="fas fa-home"></i> صفحه اصلی</div>
+    <div class="nav-item" id="videoBtn"><i class="fas fa-video"></i> ویدیوها</div>
+    <div class="nav-item" id="imageBtn"><i class="fas fa-images"></i> گالری تصاویر</div>
+  </nav>
+  
+  <aside class="pinned-section">
+    <div class="pinned-title"><i class="fas fa-thumbtack"></i> اخبار ویژه</div>
+    <div class="pinned-wrapper" id="pinnedNews"><p class="loading">در حال بارگذاری...</p></div>
+  </aside>
+  
+  <main class="main-news">
+    <div id="news"><p class="loading">در حال بارگذاری اخبار...</p></div>
+  </main>
+  
+  <aside class="sidebar">
+    <div class="search-box">
+      <h3><i class="fas fa-search"></i> جستجو</h3>
+      <input type="text" class="search-input" id="searchInput" placeholder="عنوان خبر را جستجو کنید...">
+    </div>
+    <div class="eitaa-box">
+      <h3><i class="fas fa-paper-plane"></i> کانال ایتا</h3>
+      <a href="https://eitaa.com/valiasrfoari" class="eitaa-link" target="_blank">
+        <i class="fas fa-external-link-alt"></i><span>عضویت در کانال</span>
+      </a>
+    </div>
+  </aside>
 </div>
 
-<div class="modal" id="modal">
-  <button class="modal-close" onclick="closeModal()">×</button>
-  <div class="modal-content" id="modalContent"></div>
+<div id="articleModal" class="modal">
+  <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+  <div class="modal-content">
+    <div id="modalArticleContent" class="modal-article"></div>
+  </div>
 </div>
 
 <script>
-let allArticles=[],currentFilter='all';
+// --- JS بهینه و Lazy Load ---
+const newsContainer=document.getElementById("news"),
+      pinnedNewsContainer=document.getElementById("pinnedNews"),
+      searchInput=document.getElementById("searchInput"),
+      modal=document.getElementById("articleModal"),
+      modalContent=document.getElementById("modalArticleContent"),
+      homeBtn=document.getElementById("homeBtn"),
+      videoBtn=document.getElementById("videoBtn"),
+      imageBtn=document.getElementById("imageBtn"),
+      navItems=document.querySelectorAll(".nav-item");
 
-fetch('articles/index.json?'+Date.now())
-.then(r=>r.json())
-.then(d=>{
-  d.pinned.forEach(f=>loadItem(f,true));
-  d.articles.forEach(f=>loadItem(f,false));
-});
+let allArticles=[], fullArticlesData=[], currentFilter="all";
 
-function loadItem(folder,pinned){
- fetch(`articles/${folder}/text.txt`)
- .then(r=>r.text())
- .then(t=>{
-   let [title,...c]=t.split('\n');
-   let box=document.createElement('div');
-   box.className=pinned?'pinned-news':'article';
-   box.onclick=()=>openModal(folder,title,c.join('\n'));
-   fetch(`articles/${folder}/cover.mp4`)
-   .then(r=>{
-     let m=r.ok?'video':'img';
-     let el=document.createElement(m);
-     el.src=`articles/${folder}/cover.${m=='video'?'mp4':'jpg'}`;
-     if(m=='video')el.controls=true;
-     box.appendChild(el);
-     let d=document.createElement('div');
-     d.className='content';
-     d.innerHTML=`<h3>${title}</h3>`;
-     box.appendChild(d);
-     (pinned?pinnedNews:news).appendChild(box);
-     allArticles.push({el:box,type:m});
-   });
- });
+// Nav buttons
+homeBtn.addEventListener("click",()=>filterNav("all",homeBtn));
+videoBtn.addEventListener("click",()=>filterNav("video",videoBtn));
+imageBtn.addEventListener("click",()=>filterNav("image",imageBtn));
+
+function filterNav(type,btn){
+  currentFilter=type;
+  navItems.forEach(i=>i.classList.remove("active"));
+  btn.classList.add("active");
+  filterByType(type);
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
-function setFilter(t){
- currentFilter=t;
- allArticles.forEach(a=>{
-   a.el.style.display=
-     t=='all'||(t=='video'&&a.type=='video')||(t=='image'&&a.type=='img')
-     ?'block':'none';
- });
+// Lazy load observer
+const lazyObserver=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const el=entry.target;
+      el.src=el.dataset.src;
+      lazyObserver.unobserve(el);
+    }
+  });
+},{rootMargin:"200px 0px"});
+
+// Fetch helper
+async function fetchText(url){
+  const res=await fetch(url,{cache:"no-store"});
+  if(!res.ok) throw new Error("خطا در بارگذاری "+url);
+  return await res.text();
 }
 
-function openModal(f,t,c){
- modal.classList.add('active');
- modalContent.innerHTML=`<h2>${t}</h2><pre>${c}</pre>`;
+// Load news
+async function loadNews(){
+  try{
+    const ts=Date.now();
+    const res=await fetch(`articles/index.json?t=${ts}`,{cache:"no-store"});
+    if(!res.ok) throw new Error(`خطا: ${res.status}`);
+    const data=await res.json();
+    let articlesList=[], pinnedList=[];
+    if(Array.isArray(data)){ articlesList=data; pinnedList=data.slice(0,1); }
+    else{ pinnedList=data.pinned||[]; articlesList=data.articles||[]; }
+
+    newsContainer.innerHTML=""; pinnedNewsContainer.innerHTML="";
+    allArticles=[]; fullArticlesData=[];
+
+    await Promise.allSettled(pinnedList.map(f=>loadPinned(f)));
+    const frag=document.createDocumentFragment();
+    const articlesLoaded=await Promise.allSettled(articlesList.map(f=>loadArticle(f)));
+    articlesLoaded.forEach(a=>{ if(a.status==="fulfilled"&&a.value) frag.appendChild(a.value); });
+    newsContainer.appendChild(frag);
+    document.querySelectorAll(".lazy").forEach(el=>lazyObserver.observe(el));
+
+  }catch(err){ console.error(err); newsContainer.innerHTML=`<p class='error'>${err.message}</p>`;}
 }
-function closeModal(){modal.classList.remove('active')}
+
+// ... ادامه دارد: loadPinned, loadArticle, filterByType, openModal, closeModal, search
+
+loadNews();
 </script>
 
 </body>
